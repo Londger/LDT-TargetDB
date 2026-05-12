@@ -1,0 +1,31 @@
+gene,best_cancer,best_log2tpm,second_cancer,second_log2tpm,third_cancer,third_log2tpm,n_cancers_positive,n_cancers_tested,expression_range
+EPCAM,Colorectal,10.0,Uterine,8.7,Thyroid,8.7,24,32,13.3
+MUC1,Lung Adeno,9.8,Pancreatic,9.6,Uterine,9.2,30,32,10.5
+TSPAN1,Prostate,9.8,Kidney Papillary,9.0,Pancreatic,8.0,26,32,12.1
+CLDN3,Ovarian,9.1,Colorectal,8.2,Prostate,7.9,22,32,13.1
+TACSTD2,Cervical,9.0,Bladder,8.7,Head&Neck,8.3,21,32,13.0
+CLDN4,Colorectal,9.0,Bladder,8.6,Thyroid,8.4,22,32,13.3
+CDH3,Head&Neck,8.1,Cervical,7.3,Lung Squamous,6.6,24,32,11.8
+PRSS8,Prostate,7.6,Uterine,7.5,Colorectal,7.4,22,32,11.6
+CDH1,Thyroid,7.5,Cholangiocarcinoma,7.4,Colorectal,7.4,27,32,13.1
+ABCC4,Prostate,6.8,Kidney Papillary,4.4,Kidney Clear Cell,3.7,31,32,7.2
+ATP13A3,Esophageal,6.3,AML,5.7,Kidney Clear Cell,5.6,32,32,3.2
+ABCC5,Lung Squamous,6.1,Kidney Chromophobe,4.6,Cervical,4.6,32,32,4.5
+ATP2B4,Ovarian,5.9,AML,5.9,Low Grade Glioma,5.7,32,32,3.1
+ABCA3,Low Grade Glioma,5.7,Lung Adeno,5.0,Glioblastoma,4.8,30,32,5.9
+RHBDF2,Cholangiocarcinoma,5.5,Esophageal,5.4,AML,5.2,32,32,3.5
+ANO6,Kidney Clear Cell,5.5,Pheochromocytoma,5.0,Cholangiocarcinoma,5.0,32,32,3.4
+CDCP1,Esophageal,5.3,Head&Neck,4.8,Cervical,4.5,24,32,9.1
+LY75,AML,4.8,Colorectal,4.3,DLBCL,4.1,26,32,7.8
+SLCO4C1,Kidney Papillary,4.7,Kidney Clear Cell,4.5,Testicular,2.0,7,32,14.7
+ILDR1,Kidney Chromophobe,4.2,Prostate,3.5,Thyroid,3.4,19,32,10.7
+MMEL1,Prostate,4.1,Uterine,3.6,Pancreatic,3.6,21,32,5.8
+RAET1L,Head&Neck,3.9,Lung Squamous,3.1,Esophageal,2.7,6,32,13.8
+ABCA1,Low Grade Glioma,3.8,Glioblastoma,3.8,Kidney Clear Cell,3.6,32,32,3.1
+SLC52A3,Colorectal,3.7,Stomach,3.5,Kidney Chromophobe,3.4,21,32,6.6
+SLC29A3,Breast,3.7,Ovarian,3.5,Bladder,3.5,31,32,3.8
+CACHD1,Low Grade Glioma,3.3,Glioblastoma,3.2,Uterine Carcinosarcoma,2.9,26,32,5.8
+NETO1,Low Grade Glioma,3.0,Glioblastoma,0.6,Lung Squamous,-1.1,2,32,13.0
+ABCA12,Head&Neck,2.0,Esophageal,1.5,Lung Squamous,1.0,5,32,11.9
+ABCB11,Liver,1.5,Cholangiocarcinoma,-4.0,Pancreatic,-4.3,1,32,11.5
+UNC93A,Liver,1.4,Colorectal,0.8,Stomach,-0.0,2,32,11.4

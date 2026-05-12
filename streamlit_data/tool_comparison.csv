@@ -1,0 +1,21 @@
+Feature,LDT-TargetDB,ImmunoTar,TCSA,DrugMap
+Surface protein definition,"SURFY (2,886 genes, ML-validated)","Multiple DBs (CIRFESS, COMPARTMENTS)",9 surfaceome resources integrated,Not surface-specific (whole proteome)
+Tumor/normal expression filtering,TCGA 33 types + GTEx 30 tissues,GTEx normal + user-provided tumor,TCGA + GTEx integration,416 cancer cell lines
+Single-cell resolution validation,TISCH2 (190 scRNA-seq datasets),Not available,13 cancer scRNA-seq datasets,Not available
+Protein 3D structure analysis,"AlphaFold DB (v6, 10,000+ structures)",Not available,Not available,Limited (cysteine structural features)
+Binding pocket detection,pyKVFinder grid-based detection,Not available,Not available,Not available
+Nucleophile residue profiling,LYS/TYR/HIS/SER scoring + counts,Not available,Not available,Cysteine only (isoTOP-ABPP)
+pKa prediction,PROPKA 3.5 (experimental pKa),Not available,Not available,Not available
+Solvent accessibility (SASA),FreeSASA (relative accessibility),Not available,Not available,Not available
+LDT/NAS chemistry scoring,Yes — NASA/ArNASA weight matrix,Not available,Not available,Not available
+SuFEx chemistry scoring,Yes — SuFEx weight matrix,Not available,Not available,Not available
+Covalent strategy comparison,Yes — 3-strategy comparison,Not available,Not available,Not available
+Gene essentiality (DepMap),"CRISPR Chronos (18,531 cell lines)",DepMap integration,Not available,Yes (CRISPR screens)
+Structure confidence (pLDDT),pLDDT B-factor extraction,Not available,Not available,AI-predicted ligandability
+Pan-cancer ranking,Composite TSI+LDT+pLDDT+DepMap,Ewing/Myeloma/Neuroblastoma focused,Pan-cancer surfaceome atlas,Pan-cancer cysteine atlas
+Cancer-type specific ranking,129 cancer type groups,Optimization per phenotype,Not available,By lineage subtypes
+Interactive web interface,Streamlit (interactive filtering),R Shiny (web-based),Web portal (fcgportal.org),Web portal (drugmap.net)
+Downloadable data,CSV download,Yes,Yes,Yes
+Radiopharmaceutical-specific,Yes — designed for RLT,No — immunotherapy focused,No — CAR-T/ADC focused,No — general covalent ligand
+Covalent chemistry-aware,Yes — LDT/SuFEx/traditional,No,No,Yes — cysteine-focused only
+Total unique features,19/20,9/20,8/20,11/20

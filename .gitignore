@@ -1,0 +1,19 @@
+# Data files (too large for GitHub)
+data/expression/*.gz
+data/expression/*.csv.gz
+data/expression/CRISPRGeneEffect.csv
+data/structures/*.pdb
+data/structures/*.pka
+data/structures/*.cif
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Temp files
+*.tmp
+C:/temp_sasa/
+
+# IDE
+.vscode/
+.idea/
