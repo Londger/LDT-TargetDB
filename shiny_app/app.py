@@ -41,7 +41,7 @@ df = load_data()
 # Sidebar
 # ============================================================
 st.sidebar.header("Filters")
-min_score = st.sidebar.slider("Minimum Score", 0.0, 1.0, 0.3, 0.05)
+min_score = st.sidebar.slider("Minimum Score", 0.0, 1.0, 0.0, 0.01)
 selected_residue = st.sidebar.multiselect(
     "Pocket Nucleophile", ["LYS", "CYS", "TYR", "SER"],
     default=["LYS", "CYS", "TYR", "SER"]
