@@ -63,7 +63,7 @@ ax.set_title('TSI vs LDT by Nucleophile Type')
 ax.legend(frameon=False, title='Best Residue')
 
 plt.tight_layout()
-fig1.savefig(FIG_DIR / "figure1_overview.png", dpi=200, bbox_inches='tight')
+fig1.savefig(FIG_DIR / "figure1_overview.png", dpi=600, bbox_inches='tight')
 plt.close()
 print("  Figure 1 saved")
 
@@ -104,7 +104,7 @@ wedges, texts, autotexts = ax.pie(
 ax.set_title('Nucleophile Distribution in Best Pockets')
 
 plt.tight_layout()
-fig2.savefig(FIG_DIR / "figure2_top20.png", dpi=200, bbox_inches='tight')
+fig2.savefig(FIG_DIR / "figure2_top20.png", dpi=600, bbox_inches='tight')
 plt.close()
 print("  Figure 2 saved")
 
@@ -116,36 +116,34 @@ known = pd.read_csv(BASE / "results" / "known_targets_validation.csv")
 
 # Only known targets with data
 # For now, use TSI data
-known_tsi = tsi[tsi["gene"].str.upper().isin(
-    [g.upper() for g in ["FOLH1","FAP","SSTR2","TACSTD2","MET","LY6E","ERBB2","EGFR","DLL3","CLDN6"]]
-)].copy()
-known_tsi["label"] = known_tsi["gene"].str.upper()
-
 fig3, axes = plt.subplots(1, 2, figsize=(14, 5))
 
-# (a) Known targets in our ranking
+# (a) Known targets — annotated TSI bar chart
 ax = axes[0]
-# All genes TSI
-all_tsi_sorted = tsi.sort_values("tsi", ascending=False).reset_index(drop=True)
-all_tsi_sorted["rank_pct"] = range(1, len(all_tsi_sorted)+1)
-
-for _, row in known_tsi.head(10).iterrows():
-    rank_pos = tsi.sort_values("tsi", ascending=False).reset_index(drop=True)
-    gene_str = str(row["gene"]).upper()
-    r = rank_pos[rank_pos["gene"].str.upper() == gene_str].index
+known_list = ["TACSTD2","MET","LY6E","ERBB2","FAP","FOLH1","DLL3","CLDN6","SSTR2","EGFR"]
+known_vals = {}
+for g in known_list:
+    r = tsi[tsi["gene"].str.upper() == g.upper()]
     if len(r) > 0:
-        rank_pct = r[0] / len(all_tsi_sorted) * 100
-        res_type = '#bdc3c7'
-        matched = enhanced[enhanced["gene"].str.upper() == str(row["gene"]).upper()]
-        if len(matched) > 0:
-            res_type = colors.get(matched["top_res_type"].values[0], '#bdc3c7')
-        ax.axvline(x=rank_pct, color=res_type, alpha=0.5, linewidth=1)
-        ax.text(rank_pct+0.5, 0.5, row["gene"], rotation=90, fontsize=7, va='center')
+        known_vals[g] = r["tsi"].values[0]
 
-ax.hist(np.clip(tsi["tsi"], -2, 3), bins=100, color='#3498db', alpha=0.6, edgecolor='white')
+y_pos = range(len(known_vals))
+values = list(known_vals.values())
+labels = list(known_vals.keys())
+# Color: green if in structural pipeline, gray if not
+in_structural = set(enhanced["gene"].str.upper().tolist())
+bar_colors = ['#27ae60' if l.upper() in in_structural else '#bdc3c7' for l in labels]
+ax.barh(y_pos, values, color=bar_colors, height=0.6)
+ax.set_yticks(y_pos)
+ax.set_yticklabels(labels)
 ax.set_xlabel('Tumor Specificity Index (TSI)')
-ax.set_ylabel('Count')
-ax.set_title('Known Nuclear Medicine Targets in TSI Landscape')
+ax.set_title('Known Nuclear Medicine Targets in Our Ranking')
+ax.axvline(x=0, color='red', linestyle='--', alpha=0.3)
+# Legend
+from matplotlib.patches import Patch
+ax.legend(handles=[Patch(color='#27ae60', label='In LDT structural pipeline'),
+                    Patch(color='#bdc3c7', label='Not in structural pipeline (TSI<top200)')],
+          fontsize=7, loc='lower right')
 
 # (b) DepMap comparison
 ax = axes[1]
@@ -159,7 +157,7 @@ ax.set_title('Gene Essentiality vs Tumor Specificity')
 ax.legend(frameon=False)
 
 plt.tight_layout()
-fig3.savefig(FIG_DIR / "figure3_validation.png", dpi=200, bbox_inches='tight')
+fig3.savefig(FIG_DIR / "figure3_validation.png", dpi=600, bbox_inches='tight')
 plt.close()
 print("  Figure 3 saved")
 
@@ -196,7 +194,7 @@ ax.set_title('Expression Coverage Across Tumors')
 ax.invert_yaxis()
 
 plt.tight_layout()
-fig4.savefig(FIG_DIR / "figure4_expression_features.png", dpi=200, bbox_inches='tight')
+fig4.savefig(FIG_DIR / "figure4_expression_features.png", dpi=600, bbox_inches='tight')
 plt.close()
 print("  Figure 4 saved")
 
@@ -236,7 +234,7 @@ ax.set_title('Pocket Metric Distribution')
 ax.legend(frameon=False)
 
 plt.tight_layout()
-fig5.savefig(FIG_DIR / "figure5_quality.png", dpi=200, bbox_inches='tight')
+fig5.savefig(FIG_DIR / "figure5_quality.png", dpi=600, bbox_inches='tight')
 plt.close()
 print("  Figure 5 saved")
 

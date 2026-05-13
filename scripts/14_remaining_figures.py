@@ -74,7 +74,7 @@ ax.set_xlabel('Cancer Type')
 ax.set_ylabel('Gene')
 plt.xticks(rotation=45, ha='right')
 plt.tight_layout()
-fig6.savefig(FIG_DIR / "figure6_cancer_heatmap.png", dpi=200, bbox_inches='tight')
+fig6.savefig(FIG_DIR / "figure6_cancer_heatmap.png", dpi=600, bbox_inches='tight')
 plt.close()
 print("  Figure 6 saved")
 
@@ -116,7 +116,7 @@ ax.set_title('Score Distribution: Three Covalent Strategies')
 ax.legend(frameon=False)
 
 plt.tight_layout()
-fig7.savefig(FIG_DIR / "figure7_covalent_comparison.png", dpi=200, bbox_inches='tight')
+fig7.savefig(FIG_DIR / "figure7_covalent_comparison.png", dpi=600, bbox_inches='tight')
 plt.close()
 print("  Figure 7 saved")
 
@@ -164,7 +164,7 @@ ax.set_title('Multi-Dimensional Validation Summary')
 ax.set_xlim(0, max(n_qualifying) * 1.3)
 
 plt.tight_layout()
-fig8.savefig(FIG_DIR / "figure8_tool_comparison.png", dpi=200, bbox_inches='tight')
+fig8.savefig(FIG_DIR / "figure8_tool_comparison.png", dpi=600, bbox_inches='tight')
 plt.close()
 print("  Figure 8 saved")
 
