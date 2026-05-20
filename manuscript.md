@@ -40,13 +40,13 @@ $$TSI = \frac{FC_{log2} \times P_{tumor}}{\sqrt{N_{normal} + 1}}$$
 
 where $FC_{log2}$ is the log2 fold change of median tumor versus normal expression, $P_{tumor}$ is the fraction of tumor samples with TPM > 1, and $N_{normal}$ is the number of GTEx tissues with expression exceeding 0.125 TPM. TSI was calculated for 2,663 surface genes with available expression data.
 
-**Single-Cell and Protein-Level Validation.** Cell-type specificity was assessed using a comprehensive literature-curated marker database (41 malignant epithelial, 23 immune, and additional stromal/neural markers) cross-referenced with SURFY functional annotations. Protein-level tissue expression was validated using Human Protein Atlas (HPA) immunohistochemistry data (26,27) (1,199,675 entries spanning 15,306 genes across normal tissues), enabling direct assessment of off-target expression in healthy organs.
+**Single-Cell and Protein-Level Validation.** Cell-type specificity was assessed using a comprehensive literature-curated marker database (41 malignant epithelial, 23 immune, and additional stromal/neural markers) cross-referenced with SURFY functional annotations and the TISCH2 single-cell database (21). Protein-level tissue expression was validated using Human Protein Atlas (HPA) immunohistochemistry data (26,27) (1,199,675 entries spanning 15,306 genes across normal tissues), enabling direct assessment of off-target expression in healthy organs.
 
 **Structural Analysis.** AlphaFold-predicted protein structures (v6) (17,18) were downloaded from the AlphaFold Protein Structure Database for all surface proteins with TSI > −0.01 (2,490 proteins, 2,495 structures). Binding pocket detection was performed using pyKVFinder (19,20) with grid-based cavity detection (step=0.8 Å, probe_in=1.4 Å, probe_out=4.0 Å, volume cutoff=5.0 Å³). Structure quality was assessed by extracting per-residue pLDDT scores from atomic B-factors.
 
 **Covalent Chemistry Scoring.** For each detected pocket, we scored all nucleophilic residues (Lys, Cys, Tyr, Ser) based on three components:
 
-1. **Residue type weight** ($w$): Derived from NASA reactivity literature. Lys=1.0 (stable amide), Cys=0.3 (labile thioester), Tyr=0.2 (labile phenol ester), Ser=0.1 (labile alkyl ester). Histidine was excluded as literature reports no labeled product (10).
+1. **Residue type weight** ($w$): Derived from NASA reactivity literature. Lys=1.0 (stable amide), Cys=0.3 (labile thioester), Tyr=0.2 (labile phenol ester), Ser=0.1 (labile alkyl ester). Histidine was excluded as literature reports no labeled product (10). The ArNASA variant (7) provides improved stability in physiological environments.
 
 2. **pKa reactivity score** ($p_s$): Calculated as $p_s = e^{-|pKa - 7.4|/2}$, where pKa values were experimentally predicted using PROPKA 3.5 (15). Residues with pKa closer to physiological pH receive higher scores.
 
@@ -76,7 +76,7 @@ where $V_{pocket}$ is the normalized maximum pocket volume, $pLDDT_{<70}$ is the
 
 **Figure 5. Structure quality assessment.** (A) Mean pLDDT versus LDT transferability score, with top 10 targets labeled and arrows. (B) Distribution of pocket counts across all analyzed structures.
 
-![Figure 7: Covalent strategy comparison.](results/figures/figure7_covalent_comparison.png)
+![Figure 6: Covalent strategy comparison.](results/figures/figure7_covalent_comparison.png)
 
 **Figure 6. Covalent strategy comparison.** (A) Distribution of optimal covalent strategy per target (LDT-NASA, SuFEx-CTR, or traditional cysteine-targeted). (B) Score distributions for the three covalent strategies.
 
