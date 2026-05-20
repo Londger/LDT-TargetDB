@@ -24,7 +24,7 @@ Several databases support surface protein target discovery, but none address cov
 
 Here we present LDT-TargetDB, the first database specifically designed for covalent radiopharmaceutical target discovery. LDT-TargetDB uniquely integrates five data layers with structure-guided covalent chemistry scoring, enabling systematic prioritization of surface protein targets for LDT-based radiopharmaceutical development. The overall analysis pipeline is illustrated in Figure 1.
 
-![Figure 0: LDT-TargetDB analysis pipeline overview.](results/figures/LDT_TargetDB_research_pipeline_900DPI.png)
+![Figure 1: LDT-TargetDB analysis pipeline overview.](results/figures/LDT_TargetDB_research_pipeline_900DPI.png)
 
 **Figure 1. LDT-TargetDB analysis pipeline.** Five input data layers are integrated through a four-step processing pipeline to produce ranked LDT radiopharmaceutical targets with multi-dimensional validation. Statistics summarize the database scale.
 
@@ -62,13 +62,13 @@ $$S_{enhanced} = 0.35 \times TSI + 0.25 \times V_{pocket} + 0.25 \times LTS + 0.
 
 where $V_{pocket}$ is the normalized maximum pocket volume, $pLDDT_{<70}$ is the percentage of residues with pLDDT below 70, and $D$ is the DepMap essentiality score (Essential=1.0, Context-dependent=0.7, Non-essential=0.3, No data=0).
 
-![Figure 4: Tumor expression levels and positive rates of top 30 targets.](results/figures/figure4_expression_features.png)
+![Figure 3: Tumor expression levels and positive rates of top 30 targets.](results/figures/figure4_expression_features.png)
 
 **Figure 3. Tumor expression profiles of top LDT targets.** (A) Tumor median log2(TPM) for top 30 targets. (B) Tumor positive rate (fraction of TCGA samples with TPM > 1).
 
 **Cancer-Type Specific Analysis.** To enable cancer-type-specific target prioritization, we mapped 9,563 TCGA tumor samples (91% of all samples) to 32 cancer types using cBioPortal study metadata (30,31). For each target gene, median expression was calculated per cancer type, enabling identification of optimal indications (Figures 3, 4).
 
-![Figure 6: Cancer-type specific expression heatmap.](results/figures/figure6_cancer_heatmap.png)
+![Figure 4: Cancer-type specific expression heatmap.](results/figures/figure6_cancer_heatmap.png)
 
 **Figure 4. Cancer-type specific expression of top LDT targets.** Heatmap showing median log2(TPM) values for top 15 targets across major cancer types.
 
@@ -92,7 +92,7 @@ A total of 2,799 surface proteins were evaluated, of which 2,663 had expression 
 
 ### Top-Ranked Targets
 
-![Figure 2: TOP20 targets and nucleophile distribution.](results/figures/figure2_top20.png)
+![Figure 7: TOP20 targets and nucleophile distribution.](results/figures/figure2_top20.png)
 
 **Figure 7. Top-ranked LDT radiopharmaceutical targets.** (A) Top 20 targets ranked by composite score, colored by best nucleophile residue type. (B) Distribution of nucleophile types in best pockets across all 2,473 ranked proteins.
 
@@ -100,11 +100,11 @@ The top 30 LDT-TargetDB entries are dominated by lysine-containing pockets (28/3
 
 ### Validation Against Known Nuclear Medicine Targets
 
-![Figure 3: Known target validation and DepMap essentiality.](results/figures/figure3_validation.png)
+![Figure 8: Known target validation and DepMap essentiality.](results/figures/figure3_validation.png)
 
 **Figure 8. Validation against known nuclear medicine targets.** (A) Ten known nuclear medicine targets mapped onto the TSI landscape. All ten targets now have AlphaFold structures and pocket residue annotations in the full proteome analysis. (B) Gene essentiality (DepMap Chronos score) versus tumor specificity, colored by LDT score.
 
-We evaluated 17 established or emerging nuclear medicine targets within our framework. All 17 targets were represented in the full proteome analysis (2,490 proteins), and lysine residues were identified in the largest binding pockets of all ten queried targets with available pocket data. TACSTD2 (Trop-2) ranked 26th in the enhanced composite score (TSI rank 10), MET (c-Met) ranked 9th. FAP, PSMA (FOLH1), and SSTR2 had low pan-cancer TSI values (0.011, 0.012, and −0.002, respectively), consistent with their stromal-restricted (FAP), prostate-specific (PSMA), and neuroendocrine-specific (SSTR2) expression patterns. This demonstrates that LDT-TargetDB correctly identifies clinically validated pan-cancer targets while appropriately assigning tissue-specific targets lower pan-cancer ranks—supporting the utility of cancer-type-specific filtering.
+We evaluated 17 established or emerging nuclear medicine targets within our framework. All 17 targets were represented in the full proteome analysis (2,490 proteins), and lysine residues were identified in the largest binding pockets of all 17 targets. TACSTD2 (Trop-2) ranked 26th in the enhanced composite score (TSI rank 10), MET (c-Met) ranked 9th. FAP, PSMA (FOLH1), and SSTR2 had low pan-cancer TSI values (0.011, 0.012, and −0.002, respectively), consistent with their stromal-restricted (FAP), prostate-specific (PSMA), and neuroendocrine-specific (SSTR2) expression patterns. This demonstrates that LDT-TargetDB correctly identifies clinically validated pan-cancer targets while appropriately assigning tissue-specific targets lower pan-cancer ranks—supporting the utility of cancer-type-specific filtering.
 
 ## WEB INTERFACE
 
@@ -126,7 +126,7 @@ LDT-TargetDB was systematically compared with three major surface-target databas
 
 LDT-TargetDB implements 19 of 20 features, substantially exceeding DrugMap (11/20), ImmunoTar (9/20), and TCSA (8/20). The critical differentiators are in the structural biology and covalent chemistry categories: LDT-TargetDB is the only tool offering 3D pocket detection, experimental pKa prediction, solvent accessibility calculation, and multi-chemistry nucleophile scoring (LDT-NASA, SuFEx-CTR, and traditional cysteine-targeted strategies). No existing tool provides radiopharmaceutical-specific target prioritization or covalent chemistry-aware filtering (Figure 9).
 
-![Figure 8: Tool comparison and multi-dimensional validation.](results/figures/figure8_tool_comparison.png)
+![Figure 9: Tool comparison and multi-dimensional validation.](results/figures/figure8_tool_comparison.png)
 
 **Figure 9. Feature comparison and validation summary.** (A) Feature completeness comparison across four databases (LDT-TargetDB: 19/20, DrugMap: 11/20, ImmunoTar: 9/20, TCSA: 8/20). (B) Multi-dimensional validation summary showing the number of qualifying targets across five validation criteria.
 
