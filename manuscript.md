@@ -156,7 +156,7 @@ LDT-TargetDB is freely accessible at https://ldt-targetdb.streamlit.app. All ana
 
 ## FUNDING
 
-This work was supported by [FUNDING INFORMATION TO BE ADDED].
+This work was not supported by specific funding.
 
 ## CONFLICT OF INTEREST
 
