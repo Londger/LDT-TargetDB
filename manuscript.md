@@ -62,6 +62,10 @@ $$S_{enhanced} = 0.35 \times TSI + 0.25 \times V_{pocket} + 0.25 \times LTS + 0.
 
 where $V_{pocket}$ is the normalized maximum pocket volume, $pLDDT_{<70}$ is the percentage of residues with pLDDT below 70, and $D$ is the DepMap essentiality score (Essential=1.0, Context-dependent=0.7, Non-essential=0.3, No data=0).
 
+![Figure 2: Database overview.](results/figures/figure1_overview.png)
+
+**Figure 2. Database overview.** (A) TSI distribution, (B) pocket detection per protein, (C) TSI versus LDT scoring by nucleophile type.
+
 ![Figure 3: Tumor expression levels and positive rates of top 30 targets.](results/figures/figure4_expression_features.png)
 
 **Figure 3. Tumor expression profiles of top LDT targets.** (A) Tumor median log2(TPM) for top 30 targets. (B) Tumor positive rate (fraction of TCGA samples with TPM > 1).
@@ -85,10 +89,6 @@ where $V_{pocket}$ is the normalized maximum pocket volume, $pLDDT_{<70}$ is the
 ### Database Statistics
 
 A total of 2,799 surface proteins were evaluated, of which 2,663 had expression data and 2,490 had available AlphaFold structures. Binding pocket detection identified cavities in all 2,473 successfully analyzed proteins, and 2,378 (96.2%) harbored at least one LDT-qualifying nucleophilic residue within their largest pocket. The enhanced composite scoring framework integrates 2,473 proteins with complete multi-dimensional data. The database covers 32 cancer types with 9,186 tumor samples for expression analysis, supplemented by 1,199,675 HPA protein IHC entries, 30 Open Targets disease association queries, 20 cross-species conservation analyses, and mutation data across 37 TCGA cohorts.
-
-![Figure 2: Database overview.](results/figures/figure1_overview.png)
-
-**Figure 2. Database overview.** (A) TSI distribution, (B) pocket detection per protein, (C) TSI versus LDT scoring by nucleophile type.
 
 ### Top-Ranked Targets
 
