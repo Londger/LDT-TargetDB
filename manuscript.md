@@ -1,10 +1,10 @@
 # LDT-TargetDB: A Structure-Guided Covalent Radiopharmaceutical Target Database
 
-[YOUR NAME]<sup>1</sup>
+Xinglong Zhou<sup>1</sup>, Wenbin Hou<sup>1</sup>, Yiliang Li<sup>1,\*</sup>
 
-<sup>1</sup>[YOUR AFFILIATION]
+<sup>1</sup>Institute of Radiation Medicine, Chinese Academy of Medical Sciences & Peking Union Medical College, Tianjin 300192, China
 
-\*To whom correspondence should be addressed. Email: [YOUR EMAIL]
+<sup>\*</sup>To whom correspondence should be addressed. Email: liyiliang@irm-cams.ac.cn
 
 **Keywords:** covalent radiopharmaceutical, ligand-directed transfer, surfaceome, binding pocket, target prioritization, NASA chemistry
 
