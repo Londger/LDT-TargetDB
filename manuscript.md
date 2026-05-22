@@ -154,6 +154,10 @@ This study exclusively used publicly available, de-identified data from TCGA, GT
 
 LDT-TargetDB is freely accessible at https://ldt-targetdb.streamlit.app. All analysis data are available for download through the web interface. Source code is available at https://github.com/Londger/LDT-TargetDB under the MIT license.
 
+## AUTHOR CONTRIBUTIONS
+
+X.Z. conceived the study, developed the methodology, performed all computational analyses, built the web interface, and wrote the manuscript. W.H. provided supervision and critical feedback. Y.L. conceived and supervised the study, provided resources, and revised the manuscript. All authors reviewed and approved the final manuscript.
+
 ## FUNDING
 
 This work was not supported by specific funding.
