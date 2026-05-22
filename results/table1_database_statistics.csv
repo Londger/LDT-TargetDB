@@ -1,0 +1,16 @@
+Category,Count
+Surface proteins (SURFY),"2,799"
+With TCGA expression data,"2,663"
+With GTEx normal data,"2,663"
+AlphaFold structures downloaded,"2,490"
+With detectable pockets,"~2,480 (99.6%)"
+With LDT-suitable nucleophiles,"~2,360 (95%)"
+Cancer types analyzed,32
+TCGA tumor samples,"9,186"
+GTEx normal samples,"7,862"
+Cell lines (DepMap),"1,208"
+GO terms enriched (TOP30),20 (p<0.05)
+STRING PPI edges (TOP30),45
+HPA protein IHC entries queried,"1,199,675"
+Open Targets disease queries,30 genes
+TCGA cancer types (mutation),37

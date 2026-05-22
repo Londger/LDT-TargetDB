@@ -1,0 +1,21 @@
+gene,cbioportal_url,note
+MUC1,https://www.cbioportal.org/results/cancerTypesSummary?gene_list=MUC1,Query cBioPortal for pan-cancer mutation frequency
+CDH1,https://www.cbioportal.org/results/cancerTypesSummary?gene_list=CDH1,Query cBioPortal for pan-cancer mutation frequency
+CD24,https://www.cbioportal.org/results/cancerTypesSummary?gene_list=CD24,Query cBioPortal for pan-cancer mutation frequency
+SEZ6L2,https://www.cbioportal.org/results/cancerTypesSummary?gene_list=SEZ6L2,Query cBioPortal for pan-cancer mutation frequency
+ILDR1,https://www.cbioportal.org/results/cancerTypesSummary?gene_list=ILDR1,Query cBioPortal for pan-cancer mutation frequency
+ITGB4,https://www.cbioportal.org/results/cancerTypesSummary?gene_list=ITGB4,Query cBioPortal for pan-cancer mutation frequency
+LY75,https://www.cbioportal.org/results/cancerTypesSummary?gene_list=LY75,Query cBioPortal for pan-cancer mutation frequency
+CLDN4,https://www.cbioportal.org/results/cancerTypesSummary?gene_list=CLDN4,Query cBioPortal for pan-cancer mutation frequency
+MET,https://www.cbioportal.org/results/cancerTypesSummary?gene_list=MET,Query cBioPortal for pan-cancer mutation frequency
+HLA-DMB,https://www.cbioportal.org/results/cancerTypesSummary?gene_list=HLA-DMB,Query cBioPortal for pan-cancer mutation frequency
+EPCAM,https://www.cbioportal.org/results/cancerTypesSummary?gene_list=EPCAM,Query cBioPortal for pan-cancer mutation frequency
+CD48,https://www.cbioportal.org/results/cancerTypesSummary?gene_list=CD48,Query cBioPortal for pan-cancer mutation frequency
+TMEM132A,https://www.cbioportal.org/results/cancerTypesSummary?gene_list=TMEM132A,Query cBioPortal for pan-cancer mutation frequency
+TGFA,https://www.cbioportal.org/results/cancerTypesSummary?gene_list=TGFA,Query cBioPortal for pan-cancer mutation frequency
+ITGB6,https://www.cbioportal.org/results/cancerTypesSummary?gene_list=ITGB6,Query cBioPortal for pan-cancer mutation frequency
+RNF128,https://www.cbioportal.org/results/cancerTypesSummary?gene_list=RNF128,Query cBioPortal for pan-cancer mutation frequency
+EPHB2,https://www.cbioportal.org/results/cancerTypesSummary?gene_list=EPHB2,Query cBioPortal for pan-cancer mutation frequency
+SLC39A4,https://www.cbioportal.org/results/cancerTypesSummary?gene_list=SLC39A4,Query cBioPortal for pan-cancer mutation frequency
+ZP3,https://www.cbioportal.org/results/cancerTypesSummary?gene_list=ZP3,Query cBioPortal for pan-cancer mutation frequency
+CADM1,https://www.cbioportal.org/results/cancerTypesSummary?gene_list=CADM1,Query cBioPortal for pan-cancer mutation frequency

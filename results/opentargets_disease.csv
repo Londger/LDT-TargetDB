@@ -1,0 +1,31 @@
+gene,n_disease_associations,top_disease,top_score,n_cancer_associations
+MUC1,5,"tubulointerstitial kidney disease, autosomal dominant, 2",0.7040398435219726,1
+CDH1,39,CDH1-related diffuse gastric and lobular breast cancer syndrome,0.7950540371906991,7
+CD24,20,multiple sclerosis,0.1920257147385497,7
+SEZ6L2,5,neurodegenerative disease,0.2746783840495297,3
+ILDR1,5,"hearing loss, autosomal recessive",0.719015074729093,0
+ITGB4,5,junctional epidermolysis bullosa with pyloric atresia,0.8300176755382064,0
+LY75,10,Abruptio Placentae,0.31953367678705413,0
+CLDN4,5,Proptosis,0.3182182344024239,3
+MET,30,papillary renal cell carcinoma,0.84195976263742,7
+HLA-DMB,5,periodontitis,0.07391597093694036,3
+EPCAM,5,congenital diarrhea 5 with tufting enteropathy,0.7590615474097351,2
+CD48,5,Decreased total leukocyte count,0.30894797278646813,4
+TMEM132A,5,neurodegenerative disease,0.3560667318468728,3
+TGFA,5,cancer,0.4840810162321204,1
+ITGB6,5,Hypoplastic amelogenesis imperfecta,0.6045342804405103,0
+RNF128,28,"laterality defects, autosomal dominant",0.13859244550676317,8
+EPHB2,5,medullary thyroid gland carcinoma,0.5261243162992855,3
+SLC39A4,5,acrodermatitis enteropathica,0.8360345947947957,2
+ZP3,5,oocyte maturation defect 3,0.47121322525857057,2
+CADM1,5,Abnormality of the skeletal system,0.442731358018962,0
+SIRPG,8,type 1 diabetes mellitus,0.5457344827318543,1
+GPR39,5,smoking initiation,0.41383703972786845,0
+SLC52A3,5,Brown-Vialetto-van Laere syndrome 1,0.8400858890203413,0
+CD14,5,dengue disease,0.39219972762611355,0
+TSPAN1,60,neurodegenerative disease,0.48599382260182666,5
+HLA-DQB1,15,hepatocellular carcinoma,0.08344936923843382,4
+SLC9A7,5,X-linked syndromic intellectual disability,0.46197481835587717,1
+FLRT3,5,Kallmann syndrome,0.6872152607934687,0
+PODXL2,5,ovarian neoplasm,0.34473029663071053,1
+PRSS8,5,Alzheimer disease,0.4223067864061274,3

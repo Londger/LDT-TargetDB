@@ -1,0 +1,31 @@
+gene,cell_type,description,tsi_norm,is_ideal_LDT
+MUC1,Malignant_Epithelial,Mucin-1,0.579744816563806,True
+CDH1,Malignant_Epithelial,Cadherin-1,0.9900318978871596,True
+CD24,Other/Unknown,Signal transducer CD24,0.9549441785903132,False
+SEZ6L2,Other/Unknown,Seizure 6-like protein 2,0.7169059010878427,False
+ILDR1,Immune,Immunoglobulin-like domain-containing receptor 1,0.9796650717312732,False
+ITGB4,Other/Unknown,Integrin beta-4,0.5027910685604947,False
+LY75,Immune,Lymphocyte antigen 75,0.4537480063614932,False
+CLDN4,Malignant_Epithelial,Claudin-4,0.9999999999601276,True
+MET,Other/Unknown,Hepatocyte growth factor receptor,0.5291068580331297,False
+HLA-DMB,Immune,"HLA class II histocompatibility antigen, DM beta chain",0.539872408271935,False
+EPCAM,Malignant_Epithelial,Epithelial cell adhesion molecule,0.9250398723714098,True
+CD48,Immune,CD48 antigen,0.5693779904079195,False
+TMEM132A,Other/Unknown,Transmembrane protein 132A,0.5757575757346189,False
+TGFA,Other/Unknown,Protransforming growth factor alpha,0.4708931419269979,False
+ITGB6,Other/Unknown,Integrin beta-6,0.5418660286865284,False
+RNF128,Ubiquitous,E3 ubiquitin-protein ligase RNF128,0.4601275916881926,False
+EPHB2,Other/Unknown,Ephrin type-B receptor 2,0.4832535884974779,False
+SLC39A4,Other/Unknown,Zinc transporter ZIP4,0.5366826156085852,False
+ZP3,Other/Unknown,Zona pellucida sperm-binding protein 3,0.5622009569153827,False
+CADM1,Other/Unknown,Cell adhesion molecule 1,0.4533492822785746,False
+SIRPG,Immune,Signal-regulatory protein gamma,0.463716108434461,False
+GPR39,Other/Unknown,G-protein coupled receptor 39,0.5430622009352847,False
+SLC52A3,Other/Unknown,"Solute carrier family 52, riboflavin transporter, member 3",0.5019936203946573,False
+CD14,Immune,Monocyte differentiation antigen CD14,0.4673046251807294,False
+TSPAN1,Malignant_Epithelial,Tetraspanin-1,0.7041467304344439,True
+HLA-DQB1,Immune,"HLA class II histocompatibility antigen, DQ beta 1 chain",0.5418660286865284,False
+SLC9A7,Other/Unknown,Sodium/hydrogen exchanger 7,0.47328548642451,False
+FLRT3,Other/Unknown,Leucine-rich repeat transmembrane protein FLRT3,0.4585326953565178,False
+PODXL2,Other/Unknown,Podocalyxin-like protein 2,0.5550239234228459,False
+PRSS8,Malignant_Epithelial,Prostasin,0.9900318978871596,True
