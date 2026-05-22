@@ -2,7 +2,7 @@
 
 Xinglong Zhou<sup>1</sup>, Wenbin Hou<sup>1</sup>, Yiliang Li<sup>1,\*</sup>
 
-<sup>1</sup>Institute of Radiation Medicine, Chinese Academy of Medical Sciences & Peking Union Medical College, Tianjin 300192, China
+Institute of Radiation Medicine, Chinese Academy of Medical Sciences & Peking Union Medical College, Tianjin 300192, China
 
 <sup>\*</sup>To whom correspondence should be addressed. Email: liyiliang@irm-cams.ac.cn; Correspondence may also be addressed to Xinglong Zhou, Email: zhouxinglong@irm-cams.ac.cn
 
