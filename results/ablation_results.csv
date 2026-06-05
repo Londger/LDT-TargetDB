@@ -1,0 +1,7 @@
+Ablation,AUROC
+Full model,0.621
+-TSI,0.496
+-LDT,0.76
+-Pocket,0.645
+-pLDDT,0.623
+-DepMap,0.623
