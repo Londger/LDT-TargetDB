@@ -42,7 +42,7 @@ $$TSI = \frac{FC_{log2} \times P_{tumor}}{\sqrt{N_{normal} + 1}}$$
 
 TSI = FC_log2 x P_tumor / sqrt(N_normal + 1), where FC_log2 denotes the log2 fold change of median tumor versus normal expression, P_tumor denotes the fraction of tumor samples with TPM > 1, and N_normal denotes the number of GTEx tissues with expression > 0.125 TPM. TSI rewards high tumor expression, broad tumor positivity, and limited normal tissue breadth. TSI prioritizes genes with high tumor expression, broad tumor positivity, and limited normal tissue expression. TSI was calculated for 2,663 surface genes with available expression data in both TCGA and GTEx.
 
-Single-cell resolution expression patterns were validated using the TISCH2 database [20] (190 scRNA-seq datasets across 50 cancer types) and a comprehensive literature-curated marker database (41 malignant epithelial markers, 23 immune markers). Protein-level tissue expression was assessed using Human Protein Atlas (HPA) immunohistochemistry data [25,26], comprising 1,199,675 entries spanning 15,306 genes across normal tissues, providing protein-level evidence for normal-tissue expression patterns.
+Single-cell resolution expression patterns were cross-referenced using the TISCH2 database [20] (190 scRNA-seq datasets across 50 cancer types) and a comprehensive literature-curated marker database (41 malignant epithelial markers, 23 immune markers). Protein-level tissue expression was annotated using Human Protein Atlas (HPA) immunohistochemistry data [25,26], comprising 1,199,675 entries spanning 15,306 genes across normal tissues, providing protein-level evidence for normal-tissue expression patterns.
 
 ### Post Hoc Extracellular Topology Validation
 
