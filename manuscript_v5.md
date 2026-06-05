@@ -53,12 +53,18 @@ An enhanced composite score integrates multiple dimensions: $S = 0.25 \times TSI
 ### Benchmarking Framework
 
 To evaluate the contribution of each data layer, we benchmarked four model variants against 17 known nuclear medicine targets: (i) Expression-only (TSI rank), (ii) LDT Chemistry-only (LTS rank), (iii) Full model without extracellular filter, and (iv) Full model with extracellular accessibility. Performance was assessed by enrichment of known targets in the top 1%, 5%, and 10% of predictions.
+n![Figure 10: Benchmark curves.](results/figures/figure_benchmark_roc.png)
+
+**Figure 10. Benchmark ROC and precision-recall curves.** ROC (A) and PR (B) comparing four model variants against 17 known targets.
 
 ## RESULTS
 
 ### Extracellular Surface Target Universe
 
 Of 2,799 surface proteins, 2,663 had expression data, 2,490 had available AlphaFold structures, and 2,473 completed structural analysis. Binding pockets were detected in all 2,473 proteins, with 2,378 (96.2%) harboring LDT-qualifying nucleophilic residues. Extracellular topological domain annotation confirmed extracellular accessibility for 157/200 (78.5%) top targets (Figure 2). The overall analysis framework is illustrated in Figure 1.
+n![Figure 9: Filter cascade from surface proteome to prioritized targets.](results/figures/figure_filter_cascade.png)
+
+**Figure 9. Filter cascade.** Sequential reduction from 2,799 surface proteins to extracellular-confirmed targets.
 
 ### Top-Ranked Covalent Radiopharmaceutical Targets
 
@@ -158,5 +164,4 @@ To refine pocket detection into a ligandability assessment, we applied a minimum
 
 Rigorous benchmarking using AUROC against 17 known nuclear medicine targets revealed that expression-based ranking (TSI alone) achieved the strongest performance (AUROC = 0.747, top-1% enrichment = 7.1×). The full integrated model yielded AUROC = 0.621, while LDT chemistry alone performed near random (AUROC = 0.521), confirming that chemical compatibility scoring is designed to complement—not replace—expression data.
 
-Ablation analysis (Figure 10) demonstrated that removing the TSI component caused the largest performance drop (ΔAUROC = −0.125), confirming expression as the single most important predictor of known targets. Notably, removing the LDT component slightly increased AUROC (from 0.621 to 0.760), a counterintuitive result that reflects the nature of our positive set: historically validated nuclear medicine targets were primarily discovered through expression-based approaches, making LDT chemistry scoring additive noise rather than signal for this particular benchmark. This finding underscores that LDT scoring provides orthogonal value for distinguishing novel targets among expression-equivalent candidates, rather than improving recovery of established targets.
 
