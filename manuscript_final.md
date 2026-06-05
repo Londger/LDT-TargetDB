@@ -141,7 +141,7 @@ Ablation analysis (Figure 8) quantified each component's contribution. Removing 
 
 **Figure 9. Cancer-type specific expression of top LDT targets.** Heatmap showing median log2(TPM) values for top 15 targets across major cancer types.
 
-Cancer-type-specific analysis across 32 cancer types revealed distinct target-indication pairings. EPCAM showed strongest expression in colorectal cancer (median 10.0 log2 TPM), MUC1 in lung adenocarcinoma (9.8), CD24 in kidney papillary carcinoma (10.7), CLDN4 in colorectal cancer (9.0), and TSPAN1 in prostate cancer (9.8). These expression patterns align with established clinical knowledge—EPCAM and CLDN4 as colorectal cancer markers, MUC1 as a lung adenocarcinoma antigen—validating the biological relevance of our pan-cancer rankings while enabling indication-specific target prioritization.
+Cancer-type-specific analysis across 32 cancer types revealed distinct target-indication pairings. EPCAM showed strongest expression in colorectal cancer (median 10.0 log2 TPM), MUC1 in lung adenocarcinoma (9.8), CD24 in kidney papillary carcinoma (10.7), CLDN4 in colorectal cancer (9.0), and TSPAN1 in prostate cancer (9.8). These expression patterns align with established clinical knowledge—EPCAM and CLDN4 as colorectal cancer markers, MUC1 as a lung adenocarcinoma antigen—supporting the biological plausibility of our pan-cancer rankings while enabling indication-specific target prioritization.
 
 ### Structure Quality and Covalent Chemistry Assessment
 
