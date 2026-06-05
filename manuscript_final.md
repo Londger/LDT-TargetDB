@@ -40,7 +40,7 @@ The primary surface protein set was obtained from the SURFY in silico human surf
 
 $$TSI = \frac{FC_{log2} \times P_{tumor}}{\sqrt{N_{normal} + 1}}$$
 
-where FC_log2 denotes the log2 fold change of median tumor versus normal expression, P_tumor denotes the fraction of tumor samples with TPM > 1, and N_normal denotes the number of GTEx tissues with expression > 0.125 TPM. TSI rewards high tumor expression, broad tumor positivity, and limited normal tissue breadth. TSI prioritizes genes with high tumor expression, broad tumor positivity, and limited normal tissue expression. TSI was calculated for 2,663 surface genes with available expression data in both TCGA and GTEx.
+TSI = FC_log2 x P_tumor / sqrt(N_normal + 1), where FC_log2 denotes the log2 fold change of median tumor versus normal expression, P_tumor denotes the fraction of tumor samples with TPM > 1, and N_normal denotes the number of GTEx tissues with expression > 0.125 TPM. TSI rewards high tumor expression, broad tumor positivity, and limited normal tissue breadth. TSI prioritizes genes with high tumor expression, broad tumor positivity, and limited normal tissue expression. TSI was calculated for 2,663 surface genes with available expression data in both TCGA and GTEx.
 
 Single-cell resolution expression patterns were validated using the TISCH2 database [20] (190 scRNA-seq datasets across 50 cancer types) and a comprehensive literature-curated marker database (41 malignant epithelial markers, 23 immune markers). Protein-level tissue expression was assessed using Human Protein Atlas (HPA) immunohistochemistry data [25,26], comprising 1,199,675 entries spanning 15,306 genes across normal tissues, providing protein-level evidence for normal-tissue expression patterns.
 
@@ -50,13 +50,13 @@ For radiopharmaceutical applications, target pockets must reside on the extracel
 
 ### Structural Pocket Analysis
 
-AlphaFold-predicted protein structures (downloaded November 2024, corresponding to UniProt release 2024_04) [16,17] were obtained from the AlphaFold Protein Structure Database for all surface proteins with TSI >  - 0.01 (2,490 proteins, 2,495 structures). Binding pocket detection was performed using pyKVFinder [19] with grid-based cavity detection parameters: step = 0.8 Å, probe_in = 1.4 Å, probe_out = 4.0 Å, minimum volume cutoff = 5.0 Å³. Structure quality was assessed by extracting per-residue pLDDT (predicted local distance difference test) scores from atomic B-factors. Among 2,473 successfully analyzed proteins, all contained detectable cavities, and a geometric ligandability filter (volume ≥ 100 Å³) retained 2,159 proteins (87.3%), with a mean maximum pocket volume of 788 Å³ (median 505 Å³).
+AlphaFold-predicted protein structures (downloaded November 2024, corresponding to UniProt release 2024_04) [16,17] were obtained from the AlphaFold Protein Structure Database for all surface proteins with TSI >  - 0.01 (2,490 proteins, 2,495 structures). Binding pocket detection was performed using a grid-based cavity detection approach as implemented in pyKVFinder [19], a method related to the widely used Fpocket algorithm [18], with detection parameters: step = 0.8 Å, probe_in = 1.4 Å, probe_out = 4.0 Å, minimum volume cutoff = 5.0 Å³. Structure quality was assessed by extracting per-residue pLDDT (predicted local distance difference test) scores from atomic B-factors. Among 2,473 successfully analyzed proteins, all contained detectable cavities, and a geometric ligandability filter (volume ≥ 100 Å³) retained 2,159 proteins (87.3%), with a mean maximum pocket volume of 788 Å³ (median 505 Å³).
 
 ### Covalent Chemistry Scoring
 
 For each detected pocket, all nucleophilic residues (Lys, Cys, Tyr, Ser) were scored using a physics-informed model comprising four components:
 
-1. **Residue type weight (w):** Derived from NASA reactivity literature. Lys = 1.0 (stable amide linkage), Cys = 0.3 (labile thioester), Tyr = 0.2 (labile phenol ester), Ser = 0.1 (labile alkyl ester). Histidine was excluded as the literature reports no labeled product.
+1. **Residue type weight (w):** Derived from NASA reactivity literature. Lys = 1.0 (stable amide linkage), Cys = 0.3 (labile thioester), Tyr = 0.2 (labile phenol ester), Ser = 0.1 (labile alkyl ester). Histidine was excluded because the residue-scoring model was parameterized for Lys, Cys, Tyr, and Ser based on published NASA/ArNASA reactivity datasets.
 
 2. **pKa reactivity score (p_s):** $p_s = e^{-|pKa - 7.4|/2}$, where residue pKa values were empirically predicted using PROPKA 3.5 [14]. This exponential penalty reflects the pH-dependence of nucleophile reactivity at physiological pH, with residues having pKa closest to 7.4 receiving the highest scores.
 
@@ -150,7 +150,7 @@ Cancer-type-specific analysis across 32 cancer types revealed distinct target-in
 
 **Figure 10. Structure quality assessment.** (A) Mean pLDDT versus LDT transferability score, with top 10 targets labeled. (B) Distribution of pocket counts across all analyzed structures.
 
-Structure quality assessment across 2,495 AlphaFold-predicted structures revealed robust structural coverage: 108 proteins (5.5%) had mean pLDDT exceeding 90 (very high confidence), 2,039 (82.5%) fell within the 70–90 range (generally reliable for pocket detection), and 332 (13.4%) were below 70, primarily corresponding to partially disordered regions. The pLDDT quality score was incorporated as a penalty term in the composite scoring, reducing the influence of targets with low-confidence structural models.
+Structure quality assessment across the 2,473 analyzed proteins found that 108 proteins (4.4%) had mean pLDDT exceeding 90, 2,012 (81.3%) fell within the 70–90 range, and 353 (14.3%) were below 70, among 2,473 successfully analyzed proteins, primarily corresponding to partially disordered regions. The pLDDT quality score was incorporated as a penalty term in the composite scoring, reducing the influence of targets with low-confidence structural models.
 
 
 ### Normal Tissue Risk and Translational Assessment
