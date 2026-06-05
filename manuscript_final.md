@@ -125,7 +125,7 @@ Rigorous benchmarking against 17 established nuclear medicine targets revealed t
 
 ![Figure 7: Benchmark curves.](results/figures/figure_benchmark_roc.png)
 
-**Figure 7. Benchmark ROC and precision-recall curves.** (A) ROC curves comparing three model variants against 17 known nuclear medicine targets. (B) Precision-recall curves.
+**Figure 7. Benchmark ROC and precision-recall curves.** (A) ROC curves comparing three model variants against 14 analyzable known targets (of 17 curated). (B) Precision-recall curves.
 
 ### Ablation Analysis
 
