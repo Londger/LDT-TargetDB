@@ -71,7 +71,7 @@ The overall LDT Transferability Score (LTS) for a pocket was defined as LTS = ma
 The primary composite score was defined as: Composite = 0.35 x TSI + 0.30 x V_pocket + 0.25 x LTS + 0.10 x (1 - pLDDT_below70/100),
 
 
-where V_pocket denotes the normalized maximum pocket volume and pLDDT_below70 denotes the percentage of residues with pLDDT below 70. Before composite scoring, TSI, LTS, and V_pocket were min-max normalized to the [0,1] interval across all successfully analyzed proteins. In plain text: Composite = 0.35 x TSI + 0.30 x V_pocket + 0.25 x LTS + 0.10 x (1 - pLDDT_below70/100). DepMap essentiality, EAS, normal tissue risk, and binder tractability were applied as post hoc translational annotation dimensions rather than components of the primary composite score. Sensitivity analysis across four alternative weighting schemes demonstrated robust ranking stability (Jaccard index = 0.74 for equal-weights versus default).
+where V_pocket denotes the normalized maximum pocket volume and pLDDT_below70 denotes the percentage of residues with pLDDT below 70. Before composite scoring, TSI, LTS, and V_pocket were min-max normalized to the [0,1] interval across all successfully analyzed proteins. DepMap essentiality, EAS, normal tissue risk, and binder tractability were applied as post hoc translational annotation dimensions rather than components of the primary composite score. Sensitivity analysis across four alternative weighting schemes demonstrated robust ranking stability (Jaccard index = 0.74 for equal-weights versus default).
 
 ### Benchmarking and Multi-Dimensional Validation
 
