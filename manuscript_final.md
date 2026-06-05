@@ -122,7 +122,7 @@ Rigorous benchmarking against 17 established nuclear medicine targets revealed t
 | LDT Chemistry-only | 0.521 | 0.006 | 0/14 | 0/14 | 1/14 |
 | Full composite model | 0.621 | 0.016 | 1/14 | 3/14 | 3/14 |
 
-*AUROC, area under ROC curve; AUPRC, area under precision-recall curve (baseline = 0.006 for 14 positives among 2,473 total). Top-k hits indicate the number of known targets (of 14 with complete data) recovered at each prediction percentile.* The full model matched TSI performance at stringent prediction thresholds (top-1% enrichment = 7.1× for both), while providing orthogonal structural chemistry information for distinguishing among expression-equivalent candidates.
+*AUROC, area under ROC curve; AUPRC, area under precision-recall curve (baseline = 0.006 for 14 positives among 2,473 total). Top-k hits indicate the number of known targets (of 14 with complete data) recovered at each prediction percentile.* The full model matched TSI performance at the top 1% and top 5% thresholds, but recovered fewer known targets at the top 10% threshold (3/14 vs 6/14), while providing orthogonal structural chemistry information for distinguishing among expression-equivalent candidates.
 
 ![Figure 7: Benchmark curves.](results/figures/figure_benchmark_roc.png)
 
