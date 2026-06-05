@@ -64,7 +64,7 @@ For each detected pocket, all nucleophilic residues (Lys, Cys, Tyr, Ser) were sc
 
 4. **Proximity boost (b):** Lys receives a 2× multiplicative factor reflecting the proximity-driven effective molarity enhancement that overcomes its inherently high pKa (~10.5, approximately 99.9% protonated at pH 7.4). This phenomenological correction captures the experimentally observed rate acceleration (kL ~10⁴ M⁻¹s⁻¹) in LDT chemistry [6].
 
-The overall LDT Transferability Score (LTS) for a pocket was defined as LTS = max(w × p_s × s_s × b) across all qualifying residues in that pocket, representing the most favorable nucleophile available for covalent transfer. In summary: p_s = exp(-|pKa - 7.4|), s_s = min(relative SASA / 0.5, 1), residue_score = w × p_s × s_s × b, and LTS = max(residue_score).
+The overall LDT Transferability Score (LTS) for a pocket was defined as LTS = max(w × p_s × s_s × b) across all qualifying residues in that pocket, representing the most favorable nucleophile available for covalent transfer. Target-level LTS was calculated from the largest detected pocket (by volume) for each protein. In summary: p_s = exp(-|pKa - 7.4|), s_s = min(relative SASA / 0.5, 1), residue_score = w × p_s × s_s × b, and LTS = max(residue_score).
 
 ### Composite Scoring
 
