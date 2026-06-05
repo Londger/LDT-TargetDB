@@ -171,7 +171,7 @@ Normal tissue risk scoring across seven radiosensitive organs (kidney, liver, sa
 
 ## WEB INTERFACE
 
-LDT-TargetDB is implemented as an interactive Streamlit web application freely accessible at https://ldt-targetdb.streamlit.app, requiring no login or registration. The interface provides real-time filtering by composite score threshold, pocket nucleophile type, and LDT chemistry compatibility. A sortable ranking table displays scores for TSI, LDT transferability, pocket count, best nucleophile residue, optimal cancer type, DepMap essentiality status, and structure confidence. Interactive scatter plots and residue-type distribution charts enable rapid visual exploration of the target landscape. Gene-level detail views display all scoring dimensions, cancer-type-specific expression (top three indications with median log2 TPM), and direct links to AlphaFold structure entries. Complete filtered results are downloadable as CSV files for offline analysis. The source code is available at https://github.com/Londger/LDT-TargetDB under the MIT license.
+LDT-TargetDB is implemented as an interactive Streamlit web application freely accessible at https://ldt-targetdb.streamlit.app, requiring no login or registration. The interface provides real-time filtering by composite score threshold, pocket nucleophile type, and LDT chemistry compatibility. A sortable ranking table displays scores for TSI, LDT transferability, pocket count, best nucleophile residue, optimal cancer type, DepMap essentiality status, and structure confidence. Interactive scatter plots and residue-type distribution charts enable rapid visual exploration of the target landscape. Gene-level detail views display all scoring dimensions, cancer-type-specific expression (top three indications with median log2 TPM), and direct links to AlphaFold structure entries. Complete filtered results are downloadable as CSV files for offline analysis. The source code is available at https://github.com/Londger/LDT-TargetDB under the MIT license. A versioned release of the source code and processed data will be archived on Zenodo upon publication.
 
 ## DISCUSSION
 
@@ -195,7 +195,7 @@ This study exclusively used publicly available, de-identified data from open-acc
 
 ## DATA AVAILABILITY
 
-LDT-TargetDB is freely accessible at https://ldt-targetdb.streamlit.app without login or registration. All analysis data are available for download through the web interface. Source code is available at https://github.com/Londger/LDT-TargetDB under the MIT license.
+LDT-TargetDB is freely accessible at https://ldt-targetdb.streamlit.app without login or registration. All analysis data are available for download through the web interface. Source code is available at https://github.com/Londger/LDT-TargetDB under the MIT license. A versioned release of the source code and processed data will be archived on Zenodo upon publication.
 
 ## AUTHOR CONTRIBUTIONS
 
