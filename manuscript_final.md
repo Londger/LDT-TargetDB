@@ -28,9 +28,9 @@ Here we present LDT-TargetDB, a structure- and chemistry-guided computational fr
 
 **Figure 1. LDT-TargetDB analysis pipeline.** Five input data layers are integrated through a four-step processing pipeline to produce ranked targets with multi-dimensional validation. Statistics summarize the database scale.
 
-![Figure 9: Filter cascade.](results/figures/figure_filter_cascade.png)
+![Figure 2: Filter cascade.](results/figures/figure_filter_cascade.png)
 
-**Figure 9. Filter cascade.** Sequential reduction from 2,799 surface proteins to 157 extracellular domain-confirmed LDT-compatible targets.
+**Figure 2. Filter cascade.** Sequential reduction from 2,799 surface proteins to 157 extracellular domain-confirmed LDT-compatible targets.
 
 ## METHODS
 
@@ -88,63 +88,63 @@ Cancer-type-specific expression analysis was enabled by mapping 9,563 TCGA sampl
 
 ### Extracellular Surface Target Universe and Filter Cascade
 
-A total of 2,799 surface proteins were evaluated through a sequential filtering pipeline (Figure 9). Of these, 2,663 (95.1%) had available expression data, 2,490 (89.0%) had AlphaFold-predicted structures, and 2,473 (88.4%) completed structural analysis successfully. Binding pockets were detected in all 2,473 analyzed proteins, with 2,378 (96.2%) harboring at least one LDT-qualifying nucleophilic residue (Lys, Cys, Tyr, or Ser) within their largest detected pocket. Application of a geometric ligandability filter (volume ≥ 100 Å³) retained 2,159 proteins (87.3%), while extracellular domain confirmation via UniProt topology annotation validated 157 of the top 200 targets (78.5%) as possessing confirmed extracellular topological domains.
+A total of 2,799 surface proteins were evaluated through a sequential filtering pipeline (Figure 10). Of these, 2,663 (95.1%) had available expression data, 2,490 (89.0%) had AlphaFold-predicted structures, and 2,473 (88.4%) completed structural analysis successfully. Binding pockets were detected in all 2,473 analyzed proteins, with 2,378 (96.2%) harboring at least one LDT-qualifying nucleophilic residue (Lys, Cys, Tyr, or Ser) within their largest detected pocket. Application of a geometric ligandability filter (volume ≥ 100 Å³) retained 2,159 proteins (87.3%), while extracellular domain confirmation via UniProt topology annotation validated 157 of the top 200 targets (78.5%) as possessing confirmed extracellular topological domains.
 
-![Figure 2: Database overview.](results/figures/figure1_overview.png)
+![Figure 3: Database overview.](results/figures/figure1_overview.png)
 
-**Figure 2. Database overview.** (A) Distribution of TSI across 2,663 surface proteins. (B) Number of binding pockets detected per protein. (C) TSI versus LDT transferability score, colored by best nucleophile residue type.
+**Figure 3. Database overview.** (A) Distribution of TSI across 2,663 surface proteins. (B) Number of binding pockets detected per protein. (C) TSI versus LDT transferability score, colored by best nucleophile residue type.
 
 ### Top-Ranked LDT Radiopharmaceutical Targets
 
-![Figure 7: Top-ranked targets.](results/figures/figure2_top20.png)
+![Figure 4: Top-ranked targets.](results/figures/figure2_top20.png)
 
-**Figure 7. Top-ranked LDT radiopharmaceutical targets.** (A) Top 20 targets ranked by composite score, colored by best nucleophile residue type. (B) Distribution of nucleophile types across all 2,473 ranked proteins.
+**Figure 4. Top-ranked LDT radiopharmaceutical targets.** (A) Top 20 targets ranked by composite score, colored by best nucleophile residue type. (B) Distribution of nucleophile types across all 2,473 ranked proteins.
 
 The top 30 entries are dominated by lysine-containing pockets (28/30, 93%), reflecting the NASA chemistry preference for stable amide bond formation. The top five prioritized targets with confirmed extracellular accessibility are MUC1 (mucin-1, enhanced score 0.638, EAS = 1.0), ILDR1 (immunoglobulin-like domain-containing receptor 1, score 0.594), LY75 (lymphocyte antigen 75, score 0.589), ABCC4 (ATP-binding cassette transporter C4, score 0.585), and CDH1 (E-cadherin, score 0.584). Several clinically validated cancer surface proteins rank prominently: CLDN4 (rank 8, score 0.562), EPCAM (rank 9, score 0.556), and TACSTD2/Trop-2 (rank 26, score 0.403). Notably, ABCC5—the top-ranked target when extracellular filtering is omitted—drops to rank 6 (EAS = 0.5), illustrating the critical impact of the extracellular accessibility requirement on target prioritization. The complete ranked list of 2,473 proteins is available through the web interface.
 
-![Figure 3: Expression profiles.](results/figures/figure4_expression_features.png)
+![Figure 5: Expression profiles.](results/figures/figure4_expression_features.png)
 
-**Figure 3. Tumor expression profiles.** (A) Tumor median log2(TPM) for top 30 targets. (B) Tumor positive rate (fraction of TCGA samples with TPM > 1).
+**Figure 5. Tumor expression profiles.** (A) Tumor median log2(TPM) for top 30 targets. (B) Tumor positive rate (fraction of TCGA samples with TPM > 1).
 
 ### Benchmarking Against Known Nuclear Medicine Targets
 
-![Figure 8: Known targets validation.](results/figures/figure3_validation.png)
+![Figure 6: Known targets validation.](results/figures/figure3_validation.png)
 
-**Figure 8. Validation against known targets.** (A) Ten representative known nuclear medicine targets mapped onto the TSI landscape with extracellular domain annotation. (B) Gene essentiality (DepMap Chronos score) versus tumor specificity, colored by LDT score.
+**Figure 6. Validation against known targets.** (A) Ten representative known nuclear medicine targets mapped onto the TSI landscape with extracellular domain annotation. (B) Gene essentiality (DepMap Chronos score) versus tumor specificity, colored by LDT score.
 
-Rigorous benchmarking against 17 established nuclear medicine targets revealed that expression-based ranking alone (TSI) achieved the strongest performance (AUROC = 0.747, top-1% enrichment = 7.1×). The full integrated model with extracellular filtering yielded AUROC = 0.621 (Figure 10). LDT chemistry alone performed near random (AUROC = 0.521), confirming that chemical compatibility scoring is designed to complement—not replace—expression-based prioritization. The full model matched TSI performance at stringent prediction thresholds (top-1% enrichment = 7.1× for both), while providing orthogonal structural chemistry information for distinguishing among expression-equivalent candidates.
+Rigorous benchmarking against 17 established nuclear medicine targets revealed that expression-based ranking alone (TSI) achieved the strongest performance (AUROC = 0.747, top-1% enrichment = 7.1×). The full integrated model with extracellular filtering yielded AUROC = 0.621 (Figure 7). LDT chemistry alone performed near random (AUROC = 0.521), confirming that chemical compatibility scoring is designed to complement—not replace—expression-based prioritization. The full model matched TSI performance at stringent prediction thresholds (top-1% enrichment = 7.1× for both), while providing orthogonal structural chemistry information for distinguishing among expression-equivalent candidates.
 
-![Figure 10: Benchmark curves.](results/figures/figure_benchmark_roc.png)
+![Figure 7: Benchmark curves.](results/figures/figure_benchmark_roc.png)
 
-**Figure 10. Benchmark ROC and precision-recall curves.** (A) ROC curves comparing four model variants against 17 known nuclear medicine targets. (B) Precision-recall curves.
+**Figure 7. Benchmark ROC and precision-recall curves.** (A) ROC curves comparing four model variants against 17 known nuclear medicine targets. (B) Precision-recall curves.
 
 ### Ablation Analysis
 
-![Figure 11: Ablation analysis.](results/figures/figure_ablation.png)
+![Figure 8: Ablation analysis.](results/figures/figure_ablation.png)
 
-**Figure 11. Ablation analysis.** AUROC drop when removing each component from the full model, quantifying each component's contribution to known target recovery.
+**Figure 8. Ablation analysis.** AUROC drop when removing each component from the full model, quantifying each component's contribution to known target recovery.
 
-Ablation analysis (Figure 11) quantified each component's contribution. Removing the TSI component caused the largest performance drop (ΔAUROC = −0.125), confirming tumor expression as the single most important predictor of known nuclear medicine targets. Notably, removing the LDT chemistry component slightly increased AUROC (from 0.621 to 0.760). This counterintuitive result reflects a fundamental characteristic of our positive reference set: historically validated nuclear medicine targets were primarily discovered through expression-based screening approaches, making LDT chemistry scoring additive noise rather than signal for recovering these particular targets. This observation does not diminish the value of LDT scoring; rather, it underscores that LDT chemistry provides orthogonal, expression-independent information for distinguishing novel targets among candidates with similar expression profiles—precisely the scenario where expression-based methods alone cannot differentiate.
+Ablation analysis (Figure 8) quantified each component's contribution. Removing the TSI component caused the largest performance drop (ΔAUROC = −0.125), confirming tumor expression as the single most important predictor of known nuclear medicine targets. Notably, removing the LDT chemistry component slightly increased AUROC (from 0.621 to 0.760). This counterintuitive result reflects a fundamental characteristic of our positive reference set: historically validated nuclear medicine targets were primarily discovered through expression-based screening approaches, making LDT chemistry scoring additive noise rather than signal for recovering these particular targets. This observation does not diminish the value of LDT scoring; rather, it underscores that LDT chemistry provides orthogonal, expression-independent information for distinguishing novel targets among candidates with similar expression profiles—precisely the scenario where expression-based methods alone cannot differentiate.
 
 ### Cancer-Type-Specific Target Landscape
 
-![Figure 4: Cancer heatmap.](results/figures/figure6_cancer_heatmap.png)
+![Figure 9: Cancer heatmap.](results/figures/figure6_cancer_heatmap.png)
 
-**Figure 4. Cancer-type specific expression of top LDT targets.** Heatmap showing median log2(TPM) values for top 15 targets across major cancer types.
+**Figure 9. Cancer-type specific expression of top LDT targets.** Heatmap showing median log2(TPM) values for top 15 targets across major cancer types.
 
 Cancer-type-specific analysis across 32 cancer types revealed distinct target-indication pairings. EPCAM showed strongest expression in colorectal cancer (median 10.0 log2 TPM), MUC1 in lung adenocarcinoma (9.8), CD24 in kidney papillary carcinoma (10.7), CLDN4 in colorectal cancer (9.0), and TSPAN1 in prostate cancer (9.8). These expression patterns align with established clinical knowledge—EPCAM and CLDN4 as colorectal cancer markers, MUC1 as a lung adenocarcinoma antigen—validating the biological relevance of our pan-cancer rankings while enabling indication-specific target prioritization.
 
 ### Structure Quality and Covalent Chemistry Assessment
 
-![Figure 5: Structure quality.](results/figures/figure5_quality.png)
+![Figure 10: Structure quality.](results/figures/figure5_quality.png)
 
-**Figure 5. Structure quality assessment.** (A) Mean pLDDT versus LDT transferability score, with top 10 targets labeled. (B) Distribution of pocket counts across all analyzed structures.
+**Figure 10. Structure quality assessment.** (A) Mean pLDDT versus LDT transferability score, with top 10 targets labeled. (B) Distribution of pocket counts across all analyzed structures.
 
 Structure quality assessment across 2,495 AlphaFold-predicted structures revealed robust structural coverage: 108 proteins (5.5%) had mean pLDDT exceeding 90 (very high confidence), 2,039 (82.5%) fell within the 70–90 range (generally reliable for pocket detection), and 332 (13.4%) were below 70, primarily corresponding to partially disordered regions. The pLDDT quality score was incorporated as a penalty term in the composite scoring, reducing the influence of targets with low-confidence structural models.
 
-![Figure 6: Covalent comparison.](results/figures/figure7_covalent_comparison.png)
+![Figure 11: Covalent comparison.](results/figures/figure7_covalent_comparison.png)
 
-**Figure 6. Covalent strategy comparison.** Distribution of optimal covalent strategy per target across LDT-NASA, SuFEx-CTR, and traditional cysteine-targeted approaches.
+**Figure 11. Covalent strategy comparison.** Distribution of optimal covalent strategy per target across LDT-NASA, SuFEx-CTR, and traditional cysteine-targeted approaches.
 
 ### Normal Tissue Risk and Translational Assessment
 
@@ -165,6 +165,10 @@ The ablation analysis revealed that TSI removal caused the largest performance d
 Several limitations merit discussion. First, the LDT scoring model uses empirical weights derived from published NASA chemistry data; experimental validation with a diverse panel of targets is needed to calibrate these parameters. Second, AlphaFold-predicted structures may miss cryptic or conformation-dependent pockets accessible only through protein dynamics; molecular dynamics simulations could address this limitation in future work. Third, the geometric cavity detection approach (96.2% detection rate) likely overestimates true ligandability; the volume threshold of 100 Å³ provides a first-order filter but does not substitute for physics-based ligandability assessment. Fourth, extracellular accessibility filtering was performed at the protein level using topological domain annotations rather than at the individual residue level; precise mapping of pocket residues to extracellular domains would strengthen the framework. Fifth, binder tractability assessment used manual curation rather than systematic database queries, and may miss emerging ligands or preclinical candidates. Sixth, normal tissue risk scoring using HPA IHC data provides protein-level evidence but does not quantify in vivo biodistribution, organ dosimetry, or therapeutic index—all critical for clinical radiopharmaceutical development.
 
 Future enhancements planned for LDT-TargetDB include: (i) integration of molecular dynamics simulations for cryptic pocket detection and conformational sampling; (ii) incorporation of systematic binder tractability scoring from ChEMBL, BindingDB, and DrugBank; (iii) extension to GPCR-specific covalent probe design leveraging the extensive structural pharmacology data available for this target class; (iv) addition of clinical trial and regulatory approval data for target tractability assessment; and (v) expansion to non-human model organisms to support preclinical radiopharmaceutical development.
+
+![Figure 12: Tool comparison.](results/figures/figure8_tool_comparison.png)
+
+**Figure 12. Feature comparison and validation summary.** (A) Feature completeness across four databases. (B) Multi-dimensional validation summary.
 
 ## ETHICS STATEMENT
 
