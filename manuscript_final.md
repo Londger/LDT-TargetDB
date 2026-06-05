@@ -58,7 +58,7 @@ For each detected pocket, all nucleophilic residues (Lys, Cys, Tyr, Ser) were sc
 
 1. **Residue type weight (w):** Derived from NASA reactivity literature. Lys = 1.0 (stable amide linkage), Cys = 0.3 (labile thioester), Tyr = 0.2 (labile phenol ester), Ser = 0.1 (labile alkyl ester). Histidine was excluded because the residue-scoring model was parameterized for Lys, Cys, Tyr, and Ser based on published NASA/ArNASA reactivity datasets.
 
-2. **pKa reactivity score:** p_s = exp(-abs(pKa - 7.4)), where residue pKa values were empirically predicted using PROPKA 3.5 [14]. This exponential penalty reflects the pH-dependence of nucleophile reactivity at physiological pH, with residues having pKa closest to 7.4 receiving the highest scores.
+2. **pKa reactivity score:** p_s = exp(-abs(pKa - 7.4)), where residue pKa values were empirically predicted using PROPKA 3.5 [14]. This exponential penalty serves as a heuristic proxy for physiological nucleophile availability rather than a mechanistic kinetic model, with residues having pKa closest to 7.4 receiving the highest scores.
 
 3. **Solvent accessibility score:** s_s = min(relative_SASA / 0.5, 1), where relative solvent accessible surface area (SASA) was calculated using FreeSASA [15]. Residues with greater solvent exposure (>50% relative SASA) receive maximum accessibility scores.
 
