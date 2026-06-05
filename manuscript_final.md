@@ -30,7 +30,7 @@ Here we present LDT-TargetDB, a structure- and chemistry-guided computational fr
 
 ![Figure 2: Filter cascade.](results/figures/figure_filter_cascade.png)
 
-**Figure 2. Filter cascade.** Global filtering pipeline (upper bar: 2,799 → 2,159) and post hoc extracellular validation of top 200 candidates (lower bar: 200 → 157).
+**Figure 2. Filter cascade.** Upper panel: global sequential filtering from 2,799 surface proteins to 2,159 ligandable candidates. Lower panel: post hoc extracellular domain validation of the top 200 ranked proteins (157 confirmed).
 
 ## METHODS
 
@@ -72,7 +72,7 @@ An enhanced composite score was calculated to integrate multiple orthogonal dime
 
 $$S = 0.25 \times TSI + 0.20 \times V_{pocket} + 0.20 \times LTS \times EAS + 0.10 \times (1 - pLDDT_{<70}/100) + 0.05 \times D + 0.20 \times EAS$$
 
-where $V_{pocket}$ is the normalized maximum pocket volume, $pLDDT_{<70}$ is the percentage of residues with pLDDT below 70, $D$ is the DepMap essentiality score (Essential = 1.0, Context-dependent = 0.7, Non-essential = 0.3, No data = 0), and EAS is the extracellular accessibility score. The EAS term appears twice—once multiplicatively with LTS to penalize targets where the best LDT pocket may not be extracellularly accessible, and once additively as an independent extracellular accessibility bonus. Sensitivity analysis across four alternative weighting schemes (equal weights, structure-weighted, expression-weighted) demonstrated robust ranking stability, with 17 of 20 top targets shared between the default and equal-weights schemes (Jaccard index = 0.74).
+where V_pocket denotes the normalized maximum pocket volume and pLDDT_below70 denotes the percentage of residues with pLDDT below 70. DepMap essentiality and EAS were used as post hoc annotation dimensions rather than components of the primary composite score. Sensitivity analysis across four alternative weighting schemes demonstrated robust ranking stability. The extracellular accessibility score (EAS) was applied as a post hoc translational annotation for top-ranked candidates rather than as a globally validated filter in the primary ranking, since UniProt topology was confirmed for 157 of the top 200 proteins (78.5%) while the remaining ranked proteins default to EAS = 0.7 based on SURFY surface prediction. Sensitivity analysis across four alternative weighting schemes demonstrated robust ranking stability. The extracellular accessibility score (EAS) was applied as a post hoc translational annotation for top-ranked candidates rather than as a globally validated filter in the primary ranking, since UniProt topology was confirmed for 157 of the top 200 proteins (78.5%) while the remaining ranked proteins default to EAS = 0.7 based on SURFY surface prediction.
 
 ### Benchmarking and Multi-Dimensional Validation
 
@@ -80,7 +80,7 @@ To rigorously evaluate model performance, we benchmarked four model variants aga
 
 Ablation analysis was performed by systematically removing individual components from the full model and measuring the resulting AUROC change, quantifying each component's contribution to known target recovery.
 
-Multi-dimensional validation included: (i) normal tissue risk scoring using HPA IHC data weighted by organ-specific radiosensitivity (kidney, liver, salivary gland, bone marrow, spleen, intestine, lung); (ii) gene essentiality assessment using DepMap 25Q4 CRISPR Chronos scores [23–25] (18,531 genes × 1,208 cell lines); (iii) disease association queries from Open Targets Platform version 4 [28]; (iv) cross-species conservation assessed via Ensembl Compara REST API [29]; (v) TCGA pan-cancer mutation frequencies obtained from FireBrowse across 37 cohorts; (vi) GO enrichment and protein–protein interaction network analysis using STRING [32]; and (vii) binder tractability assessment curated from literature evidence including antibody-drug conjugate (ADC), monoclonal antibody, small molecule inhibitor, radiotracer, and CAR-T cell therapy development status.
+Multi-dimensional validation included: (i) normal tissue risk scoring using HPA IHC data weighted by organ-specific radiosensitivity (HPA staining levels were converted to numerical scores: Not detected = 0, Low = 1, Medium = 2, High = 3; organ weights: kidney = 3.0, liver = 2.0, salivary gland = 2.0, bone marrow = 2.0, spleen = 1.5, intestine = 1.5, lung = 1.0; high-risk threshold = weighted score > 1.0); (ii) gene essentiality assessment using DepMap 25Q4 CRISPR Chronos scores [23–25] (18,531 genes × 1,208 cell lines); (iii) disease association queries from Open Targets Platform version 4 [28]; (iv) cross-species conservation assessed via Ensembl Compara REST API [29]; (v) TCGA pan-cancer mutation frequencies obtained from FireBrowse across 37 cohorts; (vi) GO enrichment and protein–protein interaction network analysis using STRING [32]; and (vii) binder tractability assessment curated from literature evidence (scoring: 0 = no binder evidence, 2 = antibody/reagent evidence, 3 = preclinical ADC/mAb, 5 = clinical-stage ADC/radiotracer/mAb, 7 = approved therapy with strong clinical validation).
 
 Cancer-type-specific expression analysis was enabled by mapping 9,563 TCGA samples to 32 cancer types using cBioPortal study metadata [30,31]. For each target gene, median expression was calculated per cancer type, enabling identification of optimal clinical indications for each prioritized target.
 
@@ -146,7 +146,7 @@ Structure quality assessment across 2,495 AlphaFold-predicted structures reveale
 
 ![Figure 11: Covalent comparison.](results/figures/figure7_covalent_comparison.png)
 
-**Figure S1 (Supplementary). Covalent strategy comparison.** Distribution of optimal covalent strategy across LDT-NASA, SuFEx-CTR, and traditional cysteine-targeted approaches. This comparison is provided for context; LDT-TargetDB focuses on NASA/LDT chemistry.
+
 
 ### Normal Tissue Risk and Translational Assessment
 
