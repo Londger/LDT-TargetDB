@@ -115,6 +115,8 @@ The top 30 entries are dominated by lysine-containing pockets (28/30, 93%), refl
 
 Rigorous benchmarking against the 14 analyzable targets from the curated set of 17 established nuclear medicine targets revealed that expression-based ranking alone (TSI) achieved the strongest performance (AUROC = 0.747, top-1% enrichment = 7.1×). The full composite model yielded AUROC = 0.621 (Figure 7). LDT chemistry alone performed near random (AUROC = 0.521), confirming that chemical compatibility scoring is designed to complement—not replace—expression-based prioritization.
 
+**Table 1. Benchmark performance of three model variants against 14 analyzable known nuclear medicine targets.**
+
 | Model | AUROC | AUPRC | Top 1% | Top 5% | Top 10% |
 |---|---:|---:|---:|---:|---:|
 | Expression-only (TSI) | 0.747 | 0.026 | 1/14 | 3/14 | 6/14 |
@@ -154,7 +156,7 @@ Structure quality assessment across the 2,473 analyzed proteins found that 108 p
 
 ### Normal Tissue Risk and Translational Assessment
 
-**Table 1. Translationally prioritized top LDT radiopharmaceutical targets.**
+**Table 2. Translationally prioritized top LDT radiopharmaceutical targets.**
 
 | Target | Score | EAS | LTS | Best indication | Translational note |
 |---|---:|---:|---:|---|---|
