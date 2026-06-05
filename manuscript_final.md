@@ -75,7 +75,7 @@ where V_pocket denotes the normalized maximum pocket volume and pLDDT_below70 de
 
 ### Benchmarking and Multi-Dimensional Validation
 
-To rigorously evaluate model performance, we benchmarked three model variants against 17 known nuclear medicine targets: (i) Expression-only (TSI rank), (ii) LDT Chemistry-only (LTS rank), and (iii) Full composite model. Performance was quantified using area under the receiver operating characteristic curve (AUROC), area under the precision-recall curve (AUPRC), and direct hit counts of known targets at top prediction percentiles.
+To rigorously evaluate model performance, we benchmarked three model variants against 14 known nuclear medicine targets with complete expression and structural data (curated from a reference set of 17 clinically relevant targets): (i) Expression-only (TSI rank), (ii) LDT Chemistry-only (LTS rank), and (iii) Full composite model. Performance was quantified using area under the receiver operating characteristic curve (AUROC), area under the precision-recall curve (AUPRC), and direct hit counts of known targets at top prediction percentiles.
 
 Ablation analysis was performed by systematically removing individual components from the full model and measuring the resulting AUROC change, quantifying each component's contribution to known target recovery.
 
