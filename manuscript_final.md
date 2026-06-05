@@ -40,7 +40,7 @@ The primary surface protein set was obtained from the SURFY in silico human surf
 
 $$TSI = \frac{FC_{log2} \times P_{tumor}}{\sqrt{N_{normal} + 1}}$$
 
-where $FC_{log2}$ denotes the log2 fold change of median tumor versus median normal expression, $P_{tumor}$ denotes the fraction of tumor samples with TPM exceeding 1, and $N_{normal}$ denotes the number of GTEx tissues with expression exceeding 0.125 TPM. TSI quantifies tumor-selective expression by rewarding high tumor expression ($FC_{log2}$), broad tumor positivity ($P_{tumor}$), and low normal tissue breadth ($N_{normal}$). TSI prioritizes genes with high tumor expression, broad tumor positivity, and limited normal tissue expression. TSI was calculated for 2,663 surface genes with available expression data in both TCGA and GTEx.
+where FC_log2 denotes the log2 fold change of median tumor versus normal expression, P_tumor denotes the fraction of tumor samples with TPM > 1, and N_normal denotes the number of GTEx tissues with expression > 0.125 TPM. TSI rewards high tumor expression, broad tumor positivity, and limited normal tissue breadth. TSI prioritizes genes with high tumor expression, broad tumor positivity, and limited normal tissue expression. TSI was calculated for 2,663 surface genes with available expression data in both TCGA and GTEx.
 
 Single-cell resolution expression patterns were validated using the TISCH2 database [21] (190 scRNA-seq datasets across 50 cancer types) and a comprehensive literature-curated marker database (41 malignant epithelial markers, 23 immune markers). Protein-level tissue expression was assessed using Human Protein Atlas (HPA) immunohistochemistry data [26,27], comprising 1,199,675 entries spanning 15,306 genes across normal tissues, providing protein-level evidence for normal-tissue expression patterns.
 
@@ -102,7 +102,7 @@ A total of 2,799 surface proteins were evaluated through a sequential filtering 
 
 **Figure 4. Top-ranked LDT radiopharmaceutical targets.** (A) Top 20 targets ranked by composite score, colored by best nucleophile residue type. (B) Distribution of nucleophile types across all 2,473 ranked proteins.
 
-The top 30 entries are dominated by lysine-containing pockets (28/30, 93%), reflecting the NASA chemistry preference for stable amide bond formation. The top five prioritized targets with confirmed extracellular accessibility are MUC1 (mucin-1, enhanced score 0.638, EAS = 1.0), ILDR1 (immunoglobulin-like domain-containing receptor 1, score 0.594), LY75 (lymphocyte antigen 75, score 0.589), ABCC4 (ATP-binding cassette transporter C4, score 0.585), and CDH1 (E-cadherin, score 0.584). MUC1, as the top-ranked target, represents a structurally challenging candidate because its extensive O-glycosylation and VNTR polymorphism are not captured by AlphaFold-based pocket analysis; these post-translational modifications may significantly affect epitope exposure and pocket accessibility in vivo. Several clinically validated targets rank prominently: CLDN4 (rank 8, score 0.562), EPCAM (rank 9, score 0.556), and TACSTD2/Trop-2 (rank 26, score 0.403). Notably, ABCC5—the top-ranked target when extracellular filtering is omitted—drops to rank 6 (EAS = 0.5). However, transporter targets such as ABCC4 and ABCC5 should be interpreted cautiously: protein-level extracellular annotation does not guarantee that the predicted high-scoring pocket resides in an extracellular domain, as ABC transporter cavities may localize to intracellular nucleotide-binding domains or intramembrane channels. The complete ranked list of 2,473 proteins is available through the web interface.
+The top 30 entries are dominated by lysine-containing pockets (28/30, 93%), reflecting the NASA chemistry preference for stable amide bond formation. The top five prioritized targets after post hoc extracellular topology annotation were MUC1 (mucin-1, enhanced score 0.638, EAS = 1.0), ILDR1 (immunoglobulin-like domain-containing receptor 1, score 0.594), LY75 (lymphocyte antigen 75, score 0.589), ABCC4 (ATP-binding cassette transporter C4, score 0.585), and CDH1 (E-cadherin, score 0.584). MUC1, as the top-ranked target, represents a structurally challenging candidate because its extensive O-glycosylation and VNTR polymorphism are not captured by AlphaFold-based pocket analysis; these post-translational modifications may significantly affect epitope exposure and pocket accessibility in vivo. Several clinically validated targets rank prominently: CLDN4 (rank 8, score 0.562), EPCAM (rank 9, score 0.556), and TACSTD2/Trop-2 (rank 26, score 0.403). Notably, ABCC5—the top-ranked target when extracellular filtering is omitted—drops to rank 6 (EAS = 0.5). However, transporter targets such as ABCC4 and ABCC5 should be interpreted cautiously: protein-level extracellular annotation does not guarantee that the predicted high-scoring pocket resides in an extracellular domain, as ABC transporter cavities may localize to intracellular nucleotide-binding domains or intramembrane channels. The complete ranked list of 2,473 proteins is available through the web interface.
 
 ![Figure 5: Expression profiles.](results/figures/figure4_expression_features.png)
 
@@ -114,7 +114,15 @@ The top 30 entries are dominated by lysine-containing pockets (28/30, 93%), refl
 
 **Figure 6. Validation against known targets.** (A) Ten representative known nuclear medicine targets mapped onto the TSI landscape with extracellular domain annotation. (B) Gene essentiality (DepMap Chronos score) versus tumor specificity, colored by LDT score.
 
-Rigorous benchmarking against 17 established nuclear medicine targets revealed that expression-based ranking alone (TSI) achieved the strongest performance (AUROC = 0.747, top-1% enrichment = 7.1×). The full integrated model with extracellular filtering yielded AUROC = 0.621 (Figure 7). LDT chemistry alone performed near random (AUROC = 0.521), confirming that chemical compatibility scoring is designed to complement—not replace—expression-based prioritization. The full model matched TSI performance at stringent prediction thresholds (top-1% enrichment = 7.1× for both), while providing orthogonal structural chemistry information for distinguishing among expression-equivalent candidates.
+Rigorous benchmarking against 17 established nuclear medicine targets revealed that expression-based ranking alone (TSI) achieved the strongest performance (AUROC = 0.747, top-1% enrichment = 7.1×). The full integrated model with extracellular filtering yielded AUROC = 0.621 (Figure 7). LDT chemistry alone performed near random (AUROC = 0.521), confirming that chemical compatibility scoring is designed to complement—not replace—expression-based prioritization.
+
+| Model | AUROC | AUPRC | Top 1% | Top 5% | Top 10% |
+|---|---:|---:|---:|---:|---:|
+| Expression-only (TSI) | 0.747 | 0.026 | 1/14 | 3/14 | 6/14 |
+| LDT Chemistry-only | 0.521 | 0.006 | 0/14 | 0/14 | 1/14 |
+| Full composite model | 0.621 | 0.016 | 1/14 | 3/14 | 3/14 |
+
+*AUROC, area under ROC curve; AUPRC, area under precision-recall curve (baseline = 0.006 for 14 positives among 2,473 total). Top-k hits indicate the number of known targets (of 14 with complete data) recovered at each prediction percentile.* The full model matched TSI performance at stringent prediction thresholds (top-1% enrichment = 7.1× for both), while providing orthogonal structural chemistry information for distinguishing among expression-equivalent candidates.
 
 ![Figure 7: Benchmark curves.](results/figures/figure_benchmark_roc.png)
 
@@ -158,8 +166,8 @@ Structure quality assessment across 2,495 AlphaFold-predicted structures reveale
 | ILDR1 | 0.594 | 1.0 | 0.439 | Kidney Chromophobe | Low | Low (0) | Novel target |
 | CDH1 | 0.584 | 1.0 | 0.365 | Thyroid | Low | Medium (2) | mAbs available |
 | CLDN4 | 0.562 | 1.0 | 0.203 | Colorectal | Low | High (3) | ADC in development |
-| EPCAM | 0.556 | 1.0 | 0.240 | Colorectal | Low | High (7) | Clinical-stage ADC/antibody |
-| TACSTD2 | 0.403 | 1.0 | 0.226 | Esophageal | Low | High (5) | FDA-approved ADC |
+| EPCAM | 0.556 | 1.0 | 0.240 | Colorectal | Low | High (5) | Clinical-stage ADC |
+| TACSTD2 | 0.403 | 1.0 | 0.226 | Colorectal | Low | High (7) | FDA-approved ADC |
 
 *EAS, Extracellular Accessibility Score; LTS, LDT Transferability Score; ADC, antibody-drug conjugate.*
 
