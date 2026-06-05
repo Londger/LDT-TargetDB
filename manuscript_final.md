@@ -165,7 +165,7 @@ Structure quality assessment across the 2,473 analyzed proteins found that 108 p
 | EPCAM | 0.556 | 1.0 | 0.240 | Colorectal cancer | Clinical-stage ADC/antibody (score 5) |
 | TACSTD2 | 0.403 | 1.0 | 0.226 | Colorectal cancer | FDA-approved ADC (score 7) |
 
-*EAS, Extracellular Accessibility Score; LTS, LDT Transferability Score; ADC, antibody-drug conjugate. Detailed tractability scores, normal tissue risk levels, and scoring rules are provided in Supplementary Tables S1–S2.*
+*EAS, Extracellular Accessibility Score; LTS, LDT Transferability Score; ADC, antibody-drug conjugate. Detailed tractability scores, normal tissue risk levels, and scoring rules are provided in Supplementary Table S2.*
 
 Normal tissue risk scoring across seven radiosensitive organs (kidney, liver, salivary gland, bone marrow, spleen, intestine, lung) using HPA IHC data identified 131 of 200 top targets (65.5%) as low-risk across all assessed organs. Nineteen targets (9.5%) showed high-level protein expression in one or more critical organs, warranting cautious evaluation for radiopharmaceutical applications. Binder tractability assessment revealed that five of the top 50 targets (10%) have moderate-to-high tractability (score >= 3), including TACSTD2 (7), EPCAM (5), MUC1 (5), CLDN4 (3), and LY75 (3). One additional target showed medium tractability, while the remaining 44 targets (88%) had limited or no established binder evidence, representing opportunities for novel ligand discovery efforts.
 
