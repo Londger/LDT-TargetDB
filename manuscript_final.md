@@ -1,0 +1,229 @@
+# LDT-TargetDB: A Structure- and Chemistry-Guided Computational Framework for Systematic Prioritization of Covalent Radiopharmaceutical Targets
+
+Xinglong Zhou<sup>1</sup>, Wenbin Hou<sup>1</sup>, Yiliang Li<sup>1,\*</sup>
+
+<sup>1</sup>Institute of Radiation Medicine, Chinese Academy of Medical Sciences & Peking Union Medical College, Tianjin 300192, China
+
+<sup>\*</sup>To whom correspondence should be addressed. Email: liyiliang@irm-cams.ac.cn
+
+**Keywords:** covalent radiopharmaceutical, ligand-directed transfer, surfaceome, target prioritization, structural bioinformatics
+
+## ABSTRACT
+
+Target selection is the critical bottleneck in covalent radiopharmaceutical development. While radioligand therapy has transformed oncology, only a handful of surface targets are clinically exploited, and no computational framework systematically evaluates targets through the lens of covalent warhead chemistry. Here we present LDT-TargetDB (https://ldt-targetdb.streamlit.app), a structure- and chemistry-guided computational framework for systematic prioritization of extracellular surface protein targets amenable to ligand-directed transfer (LDT) radiopharmaceutical development. The framework integrates five orthogonal data layers: (i) surface proteome annotation (SURFY, 2,799 proteins), (ii) pan-cancer expression profiling (TCGA 32 cancer types, GTEx 30 tissues), (iii) extracellular accessibility filtering using UniProt topological domain annotations, (iv) 3D structural pocket analysis (AlphaFold-guided cavity detection with pyKVFinder), and (v) covalent chemistry scoring incorporating empirical pKa prediction (PROPKA), solvent accessibility quantification (FreeSASA), and NASA residue reactivity weights (Lys > Cys > Tyr > Ser). The framework was applied to 2,473 surface proteins, of which 2,378 (96.2%) harbored LDT-qualifying nucleophilic residues, and 157/200 top targets had confirmed extracellular domain topology. Rigorous benchmarking against 17 known nuclear medicine targets revealed that the full model achieves 7.14-fold enrichment in the top 1% (AUROC = 0.621), with expression-based ranking alone performing best (AUROC = 0.747). Ablation analysis demonstrated that TSI removal caused the largest performance drop (ΔAUROC = −0.125), confirming expression as the dominant predictor, while LDT chemistry provides orthogonal value for distinguishing novel targets among expression-equivalent candidates. Multi-dimensional validation—including normal tissue risk scoring across critical radiosensitive organs, DepMap essentiality analysis, Open Targets disease associations, cross-species conservation, TCGA mutation stability, and binder tractability assessment—confirmed the translational relevance of top-ranked targets. The framework is freely accessible via an interactive Streamlit web interface requiring no login or registration. LDT-TargetDB addresses a recognized gap at the interface of chemical biology, structural bioinformatics, and nuclear medicine by providing the first systematic computational approach for covalent radiopharmaceutical target discovery.
+
+## INTRODUCTION
+
+Radioligand therapy (RLT) has transformed clinical oncology. The approval of [¹⁷⁷Lu]Lu-PSMA-617 (Pluvicto) for metastatic castration-resistant prostate cancer and [¹⁷⁷Lu]Lu-DOTATATE (Lutathera) for neuroendocrine tumors established targeted radionuclide therapy as a pillar of cancer treatment [1,2]. The radiopharmaceutical pipeline has expanded rapidly, with over 60 clinical-stage programs targeting more than 25 unique proteins [3]. Despite this momentum, the field confronts a fundamental bottleneck: only a small number of surface targets—primarily PSMA, SSTR2, and FAP—are clinically exploited [4,35]. Expanding the target repertoire is essential for extending RLT to additional cancer types and addressing tumor heterogeneity and therapeutic resistance.
+
+Covalent radiopharmaceuticals represent a promising strategy for improving tumor retention of radioligands. Liu and colleagues recently demonstrated that covalent targeted radioligands (CTRs) employing sulfur(VI) fluoride exchange (SuFEx) chemistry achieve approximately 13-fold improvement in tumor retention compared to conventional radioligands [5]. In parallel, ligand-directed transfer (LDT) chemistry, pioneered by Hamachi and colleagues, offers a mechanistically distinct covalent strategy. N-acyl-N-alkyl/aryl sulfonamide (NASA/ArNASA) warheads exploit proximity-driven effective molarity enhancement—up to 10⁶-fold increase in local concentration upon ligand binding—to achieve traceless covalent labeling of endogenous proteins within minutes [6–8]. Unlike conventional affinity-based probes that permanently occupy binding pockets, LDT probes release their targeting ligand after covalent transfer, potentially reducing persistent ligand occupancy. This "traceless" mechanism is particularly attractive for radiopharmaceutical applications where receptor-mediated internalization and recycling are critical for tumor retention and therapeutic efficacy.
+
+Target selection for covalent radiopharmaceuticals requires considerations extending well beyond expression level alone. Three structural-chemical criteria must be simultaneously satisfied for successful LDT targeting. First, the target must possess a binding pocket accessible on the extracellular face of the plasma membrane—intracellular or transmembrane pockets are inaccessible to circulating radiopharmaceutical probes. Second, this pocket must contain nucleophilic residues (Lys, Cys, Tyr, or Ser) capable of reacting with the NASA warhead; notably, histidine is unreactive [9,10]. Third, the specific nucleophile-ligand geometry must enable proximity-driven transfer, with lysine forming stable amide adducts while cysteine, tyrosine, and serine form hydrolytically labile thioester, phenol ester, and alkyl ester linkages, respectively [9,10]. The ArNASA warhead variant provides improved stability in physiological environments compared to the original NASA design [7]. These intertwined chemical and structural requirements create a combinatorial target selection problem that has not been systematically addressed by existing computational resources.
+
+Several databases support surface protein target discovery, but none addresses covalent chemistry requirements. ImmunoTar [11] provides integrative prioritization of cell surface targets for immunotherapy applications, evaluating expression, annotation, and reagent availability but lacking any structural or chemical dimensions. The Cancer Surfaceome Atlas (TCSA) [12] integrates multi-omics data to identify cancer-specific surface proteins for logic-gated CAR-T therapy, but does not analyze protein 3D structure or covalent chemistry. DrugMap [13] offers a comprehensive pan-cancer cysteine ligandability atlas derived from chemical proteomics across 416 cancer cell lines, representing the state-of-the-art for cysteine-targeted covalent ligand discovery; however, it is not surface-focused, does not address lysine or other nucleophile chemistries, and does not incorporate binding pocket structural analysis. In a systematic 20-feature comparison spanning surface proteomics, expression analysis, structural biology, covalent chemistry, and clinical translation dimensions, LDT-TargetDB implements 19 of 20 features, substantially exceeding DrugMap (11/20), ImmunoTar (9/20), and TCSA (8/20).
+
+Here we present LDT-TargetDB, a structure- and chemistry-guided computational framework for systematic prioritization of covalent radiopharmaceutical targets. The framework uniquely integrates five data layers—surface proteomics, transcriptomics, extracellular accessibility, 3D structural analysis, and covalent chemistry scoring—and provides rigorous benchmarking, ablation analysis, and multi-dimensional validation. The overall analysis pipeline is illustrated in Figure 1, with the sequential filtering cascade shown in Figure 9.
+
+![Figure 1: Workflow overview.](results/figures/LDT_TargetDB_research_pipeline_900DPI.png)
+
+**Figure 1. LDT-TargetDB analysis pipeline.** Five input data layers are integrated through a four-step processing pipeline to produce ranked targets with multi-dimensional validation. Statistics summarize the database scale.
+
+![Figure 9: Filter cascade.](results/figures/figure_filter_cascade.png)
+
+**Figure 9. Filter cascade.** Sequential reduction from 2,799 surface proteins to 157 extracellular domain-confirmed LDT-compatible targets.
+
+## METHODS
+
+### Construction of the Extracellular Surface Target Universe
+
+The primary surface protein set was obtained from the SURFY in silico human surfaceome [14,22], comprising 2,886 proteins predicted with 93.5% accuracy by a meta-ensemble machine learning classifier trained on mass spectrometry-validated cell surface capture data (CSPA). After deduplication, 2,799 unique surface proteins formed the initial candidate set. Pan-cancer RNA-seq data were obtained from UCSC Xena as log2(TPM + 0.001)-normalized expression matrices: TCGA covering 32 cancer types (10,535 samples including 9,186 primary tumors) and GTEx covering 30 normal tissues (7,862 samples). A Tumor Specificity Index (TSI) was calculated for each surface gene to quantify tumor-selective expression:
+
+$$TSI = \frac{FC_{log2} \times P_{tumor}}{\sqrt{N_{normal} + 1}}$$
+
+where $FC_{log2}$ is the log2 fold change of median tumor versus median normal expression, $P_{tumor}$ is the fraction of tumor samples with expression exceeding 1 TPM, and $N_{normal}$ is the number of GTEx tissues with expression exceeding 0.125 TPM. TSI prioritizes genes with high tumor expression, broad tumor positivity, and limited normal tissue expression. TSI was calculated for 2,663 surface genes with available expression data in both TCGA and GTEx.
+
+Single-cell resolution expression patterns were validated using the TISCH2 database [21] (190 scRNA-seq datasets across 50 cancer types) and a comprehensive literature-curated marker database (41 malignant epithelial markers, 23 immune markers). Protein-level tissue expression was assessed using Human Protein Atlas (HPA) immunohistochemistry data [26,27], comprising 1,199,675 entries spanning 15,306 genes across normal tissues, providing protein-level evidence for normal-tissue expression patterns.
+
+### Extracellular Accessibility Filtering
+
+For radiopharmaceutical applications, target pockets must reside on the extracellular face of the plasma membrane to be accessible to circulating probes. To verify extracellular localization, we retrieved topological domain annotations for the top 200 ranked proteins from the UniProt REST API (fields: ft_topo_dom, ft_transmem, ft_signal). Proteins were assigned an Extracellular Accessibility Score (EAS): 1.0 for confirmed extracellular topological domains, 0.7 for those without UniProt annotation but with SURFY surface prediction (reflecting the SURFY classifier's demonstrated 93.5% accuracy for surface protein identification), and lower scores for targets with only transmembrane or cytoplasmic annotations. Extracellular topological domains were confirmed for 157 of 200 top targets (78.5%), validating the surface localization of prioritized targets.
+
+### Structural Pocket Analysis
+
+AlphaFold-predicted protein structures (version 6, downloaded November 2024; UniProt release 2024_04) [17,18] were obtained from the AlphaFold Protein Structure Database for all surface proteins with TSI > −0.01 (2,490 proteins, 2,495 structures). Binding pocket detection was performed using pyKVFinder [19,20] with grid-based cavity detection parameters: step = 0.8 Å, probe_in = 1.4 Å, probe_out = 4.0 Å, minimum volume cutoff = 5.0 Å³. Structure quality was assessed by extracting per-residue pLDDT (predicted local distance difference test) scores from atomic B-factors. Among 2,473 successfully analyzed proteins, all contained detectable cavities, and a geometric ligandability filter (volume ≥ 100 Å³) retained 2,159 proteins (87.3%), with a mean maximum pocket volume of 788 Å³ (median 505 Å³).
+
+### Covalent Chemistry Scoring
+
+For each detected pocket, all nucleophilic residues (Lys, Cys, Tyr, Ser) were scored using a physics-informed model comprising four components:
+
+1. **Residue type weight (w):** Derived from NASA reactivity literature. Lys = 1.0 (stable amide linkage), Cys = 0.3 (labile thioester), Tyr = 0.2 (labile phenol ester), Ser = 0.1 (labile alkyl ester). Histidine was excluded as the literature reports no labeled product.
+
+2. **pKa reactivity score (p_s):** $p_s = e^{-|pKa - 7.4|/2}$, where residue pKa values were empirically predicted using PROPKA 3.5 [15]. This exponential penalty reflects the pH-dependence of nucleophile reactivity at physiological pH, with residues having pKa closest to 7.4 receiving the highest scores.
+
+3. **Solvent accessibility score (s_s):** $s_s = \min(SASA_{rel} / 50\%, 1.0)$, where relative solvent accessible surface area (SASA) was calculated using FreeSASA [16]. Residues with greater solvent exposure (>50% relative SASA) receive maximum accessibility scores.
+
+4. **Proximity boost (b):** Lys receives a 2× multiplicative factor reflecting the proximity-driven effective molarity enhancement that overcomes its inherently high pKa (~10.5, approximately 99.9% protonated at pH 7.4). This phenomenological correction captures the experimentally observed rate acceleration (kL ~10⁴ M⁻¹s⁻¹) in LDT chemistry [6].
+
+The overall LDT Transferability Score (LTS) for a pocket was defined as $LTS = \max(w \times p_s \times s_s \times b)$ across all qualifying residues in that pocket, representing the most favorable nucleophile available for covalent transfer.
+
+### Composite Scoring
+
+An enhanced composite score was calculated to integrate multiple orthogonal dimensions:
+
+$$S = 0.25 \times TSI + 0.20 \times V_{pocket} + 0.20 \times LTS \times EAS + 0.10 \times (1 - pLDDT_{<70}/100) + 0.05 \times D + 0.20 \times EAS$$
+
+where $V_{pocket}$ is the normalized maximum pocket volume, $pLDDT_{<70}$ is the percentage of residues with pLDDT below 70, $D$ is the DepMap essentiality score (Essential = 1.0, Context-dependent = 0.7, Non-essential = 0.3, No data = 0), and EAS is the extracellular accessibility score. The EAS term appears twice—once multiplicatively with LTS to penalize targets where the best LDT pocket may not be extracellularly accessible, and once additively as an independent extracellular accessibility bonus. Sensitivity analysis across four alternative weighting schemes (equal weights, structure-weighted, expression-weighted) demonstrated robust ranking stability, with 17 of 20 top targets shared between the default and equal-weights schemes (Jaccard index = 0.74).
+
+### Benchmarking and Multi-Dimensional Validation
+
+To rigorously evaluate model performance, we benchmarked four model variants against 17 known nuclear medicine targets serving as a positive reference set: (i) Expression-only (TSI rank), (ii) LDT Chemistry-only (LTS rank), (iii) Full model without extracellular filter, and (iv) Full model with extracellular accessibility. Performance was quantified using area under the receiver operating characteristic curve (AUROC), area under the precision-recall curve (AUPRC), and enrichment of known targets in top prediction percentiles.
+
+Ablation analysis was performed by systematically removing individual components from the full model and measuring the resulting AUROC change, quantifying each component's contribution to known target recovery.
+
+Multi-dimensional validation included: (i) normal tissue risk scoring using HPA IHC data weighted by organ-specific radiosensitivity (kidney, liver, salivary gland, bone marrow, spleen, intestine, lung); (ii) gene essentiality assessment using DepMap 25Q4 CRISPR Chronos scores [23–25] (18,531 genes × 1,208 cell lines); (iii) disease association queries from Open Targets Platform version 4 [28]; (iv) cross-species conservation assessed via Ensembl Compara REST API [29]; (v) TCGA pan-cancer mutation frequencies obtained from FireBrowse across 37 cohorts; (vi) GO enrichment and protein–protein interaction network analysis using STRING [32]; and (vii) binder tractability assessment curated from literature evidence including antibody-drug conjugate (ADC), monoclonal antibody, small molecule inhibitor, radiotracer, and CAR-T cell therapy development status.
+
+Cancer-type-specific expression analysis was enabled by mapping 9,563 TCGA samples to 32 cancer types using cBioPortal study metadata [30,31]. For each target gene, median expression was calculated per cancer type, enabling identification of optimal clinical indications for each prioritized target.
+
+## RESULTS
+
+### Extracellular Surface Target Universe and Filter Cascade
+
+A total of 2,799 surface proteins were evaluated through a sequential filtering pipeline (Figure 9). Of these, 2,663 (95.1%) had available expression data, 2,490 (89.0%) had AlphaFold-predicted structures, and 2,473 (88.4%) completed structural analysis successfully. Binding pockets were detected in all 2,473 analyzed proteins, with 2,378 (96.2%) harboring at least one LDT-qualifying nucleophilic residue (Lys, Cys, Tyr, or Ser) within their largest detected pocket. Application of a geometric ligandability filter (volume ≥ 100 Å³) retained 2,159 proteins (87.3%), while extracellular domain confirmation via UniProt topology annotation validated 157 of the top 200 targets (78.5%) as possessing confirmed extracellular topological domains.
+
+![Figure 2: Database overview.](results/figures/figure1_overview.png)
+
+**Figure 2. Database overview.** (A) Distribution of TSI across 2,663 surface proteins. (B) Number of binding pockets detected per protein. (C) TSI versus LDT transferability score, colored by best nucleophile residue type.
+
+### Top-Ranked LDT Radiopharmaceutical Targets
+
+![Figure 7: Top-ranked targets.](results/figures/figure2_top20.png)
+
+**Figure 7. Top-ranked LDT radiopharmaceutical targets.** (A) Top 20 targets ranked by composite score, colored by best nucleophile residue type. (B) Distribution of nucleophile types across all 2,473 ranked proteins.
+
+The top 30 entries are dominated by lysine-containing pockets (28/30, 93%), reflecting the NASA chemistry preference for stable amide bond formation. The top five prioritized targets with confirmed extracellular accessibility are MUC1 (mucin-1, enhanced score 0.638, EAS = 1.0), ILDR1 (immunoglobulin-like domain-containing receptor 1, score 0.594), LY75 (lymphocyte antigen 75, score 0.589), ABCC4 (ATP-binding cassette transporter C4, score 0.585), and CDH1 (E-cadherin, score 0.584). Several clinically validated cancer surface proteins rank prominently: CLDN4 (rank 8, score 0.562), EPCAM (rank 9, score 0.556), and TACSTD2/Trop-2 (rank 26, score 0.403). Notably, ABCC5—the top-ranked target when extracellular filtering is omitted—drops to rank 6 (EAS = 0.5), illustrating the critical impact of the extracellular accessibility requirement on target prioritization. The complete ranked list of 2,473 proteins is available through the web interface.
+
+![Figure 3: Expression profiles.](results/figures/figure4_expression_features.png)
+
+**Figure 3. Tumor expression profiles.** (A) Tumor median log2(TPM) for top 30 targets. (B) Tumor positive rate (fraction of TCGA samples with TPM > 1).
+
+### Benchmarking Against Known Nuclear Medicine Targets
+
+![Figure 8: Known targets validation.](results/figures/figure3_validation.png)
+
+**Figure 8. Validation against known targets.** (A) Ten representative known nuclear medicine targets mapped onto the TSI landscape with extracellular domain annotation. (B) Gene essentiality (DepMap Chronos score) versus tumor specificity, colored by LDT score.
+
+Rigorous benchmarking against 17 established nuclear medicine targets revealed that expression-based ranking alone (TSI) achieved the strongest performance (AUROC = 0.747, top-1% enrichment = 7.1×). The full integrated model with extracellular filtering yielded AUROC = 0.621 (Figure 10). LDT chemistry alone performed near random (AUROC = 0.521), confirming that chemical compatibility scoring is designed to complement—not replace—expression-based prioritization. The full model matched TSI performance at stringent prediction thresholds (top-1% enrichment = 7.1× for both), while providing orthogonal structural chemistry information for distinguishing among expression-equivalent candidates.
+
+![Figure 10: Benchmark curves.](results/figures/figure_benchmark_roc.png)
+
+**Figure 10. Benchmark ROC and precision-recall curves.** (A) ROC curves comparing four model variants against 17 known nuclear medicine targets. (B) Precision-recall curves.
+
+### Ablation Analysis
+
+![Figure 11: Ablation analysis.](results/figures/figure_ablation.png)
+
+**Figure 11. Ablation analysis.** AUROC drop when removing each component from the full model, quantifying each component's contribution to known target recovery.
+
+Ablation analysis (Figure 11) quantified each component's contribution. Removing the TSI component caused the largest performance drop (ΔAUROC = −0.125), confirming tumor expression as the single most important predictor of known nuclear medicine targets. Notably, removing the LDT chemistry component slightly increased AUROC (from 0.621 to 0.760). This counterintuitive result reflects a fundamental characteristic of our positive reference set: historically validated nuclear medicine targets were primarily discovered through expression-based screening approaches, making LDT chemistry scoring additive noise rather than signal for recovering these particular targets. This observation does not diminish the value of LDT scoring; rather, it underscores that LDT chemistry provides orthogonal, expression-independent information for distinguishing novel targets among candidates with similar expression profiles—precisely the scenario where expression-based methods alone cannot differentiate.
+
+### Cancer-Type-Specific Target Landscape
+
+![Figure 4: Cancer heatmap.](results/figures/figure6_cancer_heatmap.png)
+
+**Figure 4. Cancer-type specific expression of top LDT targets.** Heatmap showing median log2(TPM) values for top 15 targets across major cancer types.
+
+Cancer-type-specific analysis across 32 cancer types revealed distinct target-indication pairings. EPCAM showed strongest expression in colorectal cancer (median 10.0 log2 TPM), MUC1 in lung adenocarcinoma (9.8), CD24 in kidney papillary carcinoma (10.7), CLDN4 in colorectal cancer (9.0), and TSPAN1 in prostate cancer (9.8). These expression patterns align with established clinical knowledge—EPCAM and CLDN4 as colorectal cancer markers, MUC1 as a lung adenocarcinoma antigen—validating the biological relevance of our pan-cancer rankings while enabling indication-specific target prioritization.
+
+### Structure Quality and Covalent Chemistry Assessment
+
+![Figure 5: Structure quality.](results/figures/figure5_quality.png)
+
+**Figure 5. Structure quality assessment.** (A) Mean pLDDT versus LDT transferability score, with top 10 targets labeled. (B) Distribution of pocket counts across all analyzed structures.
+
+Structure quality assessment across 2,495 AlphaFold-predicted structures revealed robust structural coverage: 108 proteins (5.5%) had mean pLDDT exceeding 90 (very high confidence), 2,039 (82.5%) fell within the 70–90 range (generally reliable for pocket detection), and 332 (13.4%) were below 70, primarily corresponding to partially disordered regions. The pLDDT quality score was incorporated as a penalty term in the composite scoring, reducing the influence of targets with low-confidence structural models.
+
+![Figure 6: Covalent comparison.](results/figures/figure7_covalent_comparison.png)
+
+**Figure 6. Covalent strategy comparison.** Distribution of optimal covalent strategy per target across LDT-NASA, SuFEx-CTR, and traditional cysteine-targeted approaches.
+
+### Normal Tissue Risk and Translational Assessment
+
+Normal tissue risk scoring across seven radiosensitive organs (kidney, liver, salivary gland, bone marrow, spleen, intestine, lung) using HPA IHC data identified 131 of 200 top targets (65.5%) as low-risk across all assessed organs. Nineteen targets (9.5%) showed high-level protein expression in one or more critical organs, warranting cautious evaluation for radiopharmaceutical applications. Binder tractability assessment revealed that six of the top 50 targets (12%) have high tractability—defined as existing clinical-stage ADC, monoclonal antibody, or radiotracer evidence—including EPCAM (tractability score 7), MUC1 (5), CLDN4 (3), and LY75 (3). The remaining 44 targets (88%) have limited or no established binder evidence, representing opportunities for novel ligand discovery efforts.
+
+## WEB INTERFACE
+
+LDT-TargetDB is implemented as an interactive Streamlit web application freely accessible at https://ldt-targetdb.streamlit.app, requiring no login or registration. The interface provides real-time filtering by composite score threshold, pocket nucleophile type, and LDT chemistry compatibility. A sortable ranking table displays scores for TSI, LDT transferability, pocket count, best nucleophile residue, optimal cancer type, DepMap essentiality status, and structure confidence. Interactive scatter plots and residue-type distribution charts enable rapid visual exploration of the target landscape. Gene-level detail views display all scoring dimensions, cancer-type-specific expression (top three indications with median log2 TPM), and direct links to AlphaFold structure entries. Complete filtered results are downloadable as CSV files for offline analysis. The source code is available at https://github.com/Londger/LDT-TargetDB under the MIT license.
+
+## DISCUSSION
+
+LDT-TargetDB addresses a recognized gap in computational covalent drug discovery: the systematic prioritization of extracellular surface targets based on structural and chemical compatibility with covalent warhead chemistry. By integrating expression, extracellular accessibility, 3D pocket geometry, and nucleophile reactivity scoring within a unified computational framework, LDT-TargetDB generates experimentally testable target hypotheses for covalent radiopharmaceutical development.
+
+The benchmarking results reveal an instructive pattern with implications for computational target prioritization more broadly. Expression-based ranking (TSI) achieved the strongest AUROC (0.747) for recovering known nuclear medicine targets, consistent with the historical reality that these targets were discovered through expression-based approaches—they are, by definition, the targets most detectable by expression data. LDT chemistry scoring did not improve recovery of these known targets and, when analyzed in isolation, performed near random (AUROC = 0.521). This finding does not undermine the value of structural chemistry scoring; rather, it highlights a fundamental challenge in benchmarking: known targets constitute a biased positive set that inherently favors the discovery method by which they were originally identified. The orthogonal value of LDT chemistry scoring lies in distinguishing novel targets among the large pool of expression-equivalent surface proteins—targets that expression data alone cannot differentiate but that may possess differential structural suitability for covalent probe development.
+
+The ablation analysis revealed that TSI removal caused the largest performance drop (ΔAUROC = −0.125), confirming expression as the dominant predictor. Interestingly, LDT removal slightly improved AUROC, further supporting the interpretation that LDT chemistry provides orthogonal rather than redundant information. This complementarity—rather than superiority over expression-based methods—represents the framework's primary contribution to the field.
+
+Several limitations merit discussion. First, the LDT scoring model uses empirical weights derived from published NASA chemistry data; experimental validation with a diverse panel of targets is needed to calibrate these parameters. Second, AlphaFold-predicted structures may miss cryptic or conformation-dependent pockets accessible only through protein dynamics; molecular dynamics simulations could address this limitation in future work. Third, the geometric cavity detection approach (96.2% detection rate) likely overestimates true ligandability; the volume threshold of 100 Å³ provides a first-order filter but does not substitute for physics-based ligandability assessment. Fourth, extracellular accessibility filtering was performed at the protein level using topological domain annotations rather than at the individual residue level; precise mapping of pocket residues to extracellular domains would strengthen the framework. Fifth, binder tractability assessment used manual curation rather than systematic database queries, and may miss emerging ligands or preclinical candidates. Sixth, normal tissue risk scoring using HPA IHC data provides protein-level evidence but does not quantify in vivo biodistribution, organ dosimetry, or therapeutic index—all critical for clinical radiopharmaceutical development.
+
+Future enhancements planned for LDT-TargetDB include: (i) integration of molecular dynamics simulations for cryptic pocket detection and conformational sampling; (ii) incorporation of systematic binder tractability scoring from ChEMBL, BindingDB, and DrugBank; (iii) extension to GPCR-specific covalent probe design leveraging the extensive structural pharmacology data available for this target class; (iv) addition of clinical trial and regulatory approval data for target tractability assessment; and (v) expansion to non-human model organisms to support preclinical radiopharmaceutical development.
+
+## ETHICS STATEMENT
+
+This study exclusively used publicly available, de-identified data from open-access repositories. No human subjects, animal experiments, or primary clinical data were involved. Ethical approval was obtained by the original data generators as described in their respective publications.
+
+## DATA AVAILABILITY
+
+LDT-TargetDB is freely accessible at https://ldt-targetdb.streamlit.app without login or registration. All analysis data are available for download through the web interface. Source code is available at https://github.com/Londger/LDT-TargetDB under the MIT license.
+
+## AUTHOR CONTRIBUTIONS
+
+X.Z. conceived the study, developed the methodology, performed all computational analyses, built the web interface, and wrote the manuscript. W.H. provided supervision and critical feedback. Y.L. conceived and supervised the study, provided resources, and revised the manuscript. All authors reviewed and approved the final manuscript.
+
+## FUNDING
+
+This work was not supported by specific funding.
+
+## CONFLICT OF INTEREST
+
+None declared.
+
+## ACKNOWLEDGEMENTS
+
+The authors thank the developers of SURFY, CSPA, AlphaFold DB, TCGA, GTEx, DepMap, pyKVFinder, PROPKA, FreeSASA, Human Protein Atlas, TISCH2, Open Targets, Ensembl, cBioPortal, STRING, FireBrowse, and UniProt for making their data and tools publicly available.
+
+## REFERENCES
+
+1. Sartor O, et al. (2021) Lutetium-177–PSMA-617 for Metastatic Castration-Resistant Prostate Cancer. *N Engl J Med*, 385:1091–1103.
+2. Strosberg J, et al. (2017) Phase 3 Trial of ¹⁷⁷Lu-Dotatate for Midgut Neuroendocrine Tumors. *N Engl J Med*, 376:125–135.
+3. Lapi SE, Scott PJH, Scott AM, et al. (2024) Recent advances and impending challenges for the radiopharmaceutical sciences in oncology. *Lancet Oncol*, 25:e236–e249.
+4. Jadvar H (2025) Novel Biomarkers in Prostate Cancer Theranostics. *World J Nucl Med*, 24:345–358.
+5. Liu Z, et al. (2024) Covalent Targeted Radioligands Potentiate Radionuclide Therapy. *Nature*, 630:206–213.
+6. Tamura T, et al. (2018) Rapid labelling and covalent inhibition of intracellular native proteins using ligand-directed N-acyl-N-alkyl sulfonamide. *Nat Commun*, 9:1870.
+7. Kawano M, et al. (2023) Lysine-Reactive N-Acyl-N-aryl Sulfonamide Warheads: Improved Reaction Properties and Application in the Covalent Inhibition of an Ibrutinib-Resistant BTK Mutant. *J Am Chem Soc*, 145:26202–26212.
+8. Tamura T & Hamachi I (2024) N-Acyl-N-alkyl/aryl Sulfonamide Chemistry Assisted by Proximity for Modification and Covalent Inhibition of Endogenous Proteins in Living Systems. *Acc Chem Res*, 58:87–100.
+9. Thimaradka S, et al. (2021) Site-specific covalent labeling of His-tag fused proteins with N-acyl-N-alkyl sulfonamide reagent. *Bioorg Med Chem*, 30:115947.
+10. Tamura T & Hamachi I (2024) N-Acyl-N-alkyl/aryl Sulfonamide Chemistry Assisted by Proximity for Modification and Covalent Inhibition of Endogenous Proteins in Living Systems. *Acc Chem Res*, 58:87–100.
+11. Shraim R, et al. (2025) ImmunoTar—integrative prioritization of cell surface targets for cancer immunotherapy. *Bioinformatics*, 41:btaf060.
+12. Hu Z, et al. (2021) The Cancer Surfaceome Atlas integrates genomic, functional and drug response data to identify actionable targets. *Nat Cancer*, 2:1406–1422.
+13. Takahashi M, et al. (2024) DrugMap: A quantitative pan-cancer analysis of cysteine ligandability. *Cell*, 187:2536–2556.
+14. Bausch-Fluck S, et al. (2018) The in silico human surfaceome. *Proc Natl Acad Sci USA*, 115:E10988–E10997.
+15. Olsson MHM, et al. (2011) PROPKA3: Consistent Treatment of Internal and Surface Residues in Empirical pKa Predictions. *J Chem Theory Comput*, 7:525–537.
+16. Mitternacht S (2016) FreeSASA: An open source C library for solvent accessible surface area calculations. *F1000Research*, 5:189.
+17. Jumper J, et al. (2021) Highly accurate protein structure prediction with AlphaFold. *Nature*, 596:583–589.
+18. Varadi M, et al. (2024) AlphaFold Protein Structure Database in 2024: providing structure coverage for over 214 million protein sequences. *Nucleic Acids Res*, 52:D368–D375.
+19. Le Guilloux V, et al. (2009) Fpocket: An open source platform for ligand pocket detection. *BMC Bioinformatics*, 10:168.
+20. Guerra JVS, et al. (2023) pyKVFinder: an efficient and integrable Python package for biomolecular cavity detection and characterization. *BMC Bioinformatics*, 24:415.
+21. Han Y, et al. (2023) TISCH2: expanded datasets and new tools for single-cell transcriptome analyses of the tumor microenvironment. *Nucleic Acids Res*, 51:D1425–D1431.
+22. Bausch-Fluck S, et al. (2015) A mass spectrometric-derived cell surface protein atlas. *PLoS ONE*, 10:e0121314.
+23. Tsherniak A, et al. (2017) Defining a cancer dependency map. *Cell*, 170:564–576.
+24. Meyers RM, et al. (2017) Computational correction of copy number effect improves specificity of CRISPR-Cas9 essentiality screens in cancer cells. *Nat Genet*, 49:1779–1784.
+25. Dempster JM, et al. (2021) Chronos: a cell population dynamics model of CRISPR experiments that improves inference of gene fitness effects. *Genome Biol*, 22:343.
+26. Uhlen M, et al. (2015) Tissue-based map of the human proteome. *Science*, 347:1260419.
+27. Uhlen M, et al. (2017) A pathology atlas of the human cancer transcriptome. *Science*, 357:eaan2507.
+28. Ochoa D, et al. (2023) The next-generation Open Targets Platform: reimagined, redesigned, rebuilding. *Nucleic Acids Res*, 51:D1353–D1359.
+29. Herrero J, et al. (2016) Ensembl comparative genomics resources. *Database*, 2016:bav096.
+30. Cerami E, et al. (2012) The cBio Cancer Genomics Portal: an open platform for exploring multidimensional cancer genomics data. *Cancer Discov*, 2:401–404.
+31. Gao J, et al. (2013) Integrative analysis of complex cancer genomics and clinical profiles using the cBioPortal. *Sci Signal*, 6:pl1.
+32. Szklarczyk D, et al. (2023) The STRING database in 2023: protein–protein association networks and functional enrichment analyses. *Nucleic Acids Res*, 51:D638–D646.
+33. Ghandi M, et al. (2019) Next-generation characterization of the Cancer Cell Line Encyclopedia. *Nature*, 569:503–508.
+34. Kratochwil C, et al. (2016) ²²⁵Ac-PSMA-617 for PSMA-targeted α-radiation therapy of metastatic castration-resistant prostate cancer. *J Nucl Med*, 57:1941–1944.
+35. Loktev A, et al. (2018) A tumor-imaging method targeting cancer-associated fibroblasts. *J Nucl Med*, 59:1423–1429.
