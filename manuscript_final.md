@@ -68,11 +68,11 @@ The overall LDT Transferability Score (LTS) for a pocket was defined as $LTS = \
 
 ### Composite Scoring
 
-An enhanced composite score was calculated to integrate multiple orthogonal dimensions:
+An enhanced composite score was calculated by integrating the primary dimensions of expression, structure, and covalent chemistry:
 
-$$S = 0.25 \times TSI + 0.20 \times V_{pocket} + 0.20 \times LTS \times EAS + 0.10 \times (1 - pLDDT_{<70}/100) + 0.05 \times D + 0.20 \times EAS$$
+$$S = 0.35 \times TSI + 0.30 \times V_{pocket} + 0.25 \times LTS + 0.10 \times (1 - pLDDT_{<70}/100)$$
 
-where V_pocket denotes the normalized maximum pocket volume and pLDDT_below70 denotes the percentage of residues with pLDDT below 70. DepMap essentiality and EAS were used as post hoc annotation dimensions rather than components of the primary composite score. Sensitivity analysis across four alternative weighting schemes demonstrated robust ranking stability. The extracellular accessibility score (EAS) was applied as a post hoc translational annotation for top-ranked candidates rather than as a globally validated filter in the primary ranking, since UniProt topology was confirmed for 157 of the top 200 proteins (78.5%) while the remaining ranked proteins default to EAS = 0.7 based on SURFY surface prediction. Sensitivity analysis across four alternative weighting schemes demonstrated robust ranking stability. The extracellular accessibility score (EAS) was applied as a post hoc translational annotation for top-ranked candidates rather than as a globally validated filter in the primary ranking, since UniProt topology was confirmed for 157 of the top 200 proteins (78.5%) while the remaining ranked proteins default to EAS = 0.7 based on SURFY surface prediction.
+where V_pocket denotes the normalized maximum pocket volume and pLDDT_below70 denotes the percentage of residues with pLDDT below 70. DepMap essentiality, EAS, normal tissue risk, and binder tractability were applied as post hoc translational annotation dimensions rather than components of the primary composite score. Sensitivity analysis across four alternative weighting schemes demonstrated robust ranking stability (Jaccard index = 0.74 for equal-weights versus default).
 
 ### Benchmarking and Multi-Dimensional Validation
 
@@ -114,7 +114,7 @@ The top 30 entries are dominated by lysine-containing pockets (28/30, 93%), refl
 
 **Figure 6. Validation against known targets.** (A) Ten representative known nuclear medicine targets mapped onto the TSI landscape with extracellular domain annotation. (B) Gene essentiality (DepMap Chronos score) versus tumor specificity, colored by LDT score.
 
-Rigorous benchmarking against 17 established nuclear medicine targets revealed that expression-based ranking alone (TSI) achieved the strongest performance (AUROC = 0.747, top-1% enrichment = 7.1×). The full integrated model with extracellular filtering yielded AUROC = 0.621 (Figure 7). LDT chemistry alone performed near random (AUROC = 0.521), confirming that chemical compatibility scoring is designed to complement—not replace—expression-based prioritization.
+Rigorous benchmarking against 17 established nuclear medicine targets revealed that expression-based ranking alone (TSI) achieved the strongest performance (AUROC = 0.747, top-1% enrichment = 7.1×). The full composite model yielded AUROC = 0.621 (Figure 7). LDT chemistry alone performed near random (AUROC = 0.521), confirming that chemical compatibility scoring is designed to complement—not replace—expression-based prioritization.
 
 | Model | AUROC | AUPRC | Top 1% | Top 5% | Top 10% |
 |---|---:|---:|---:|---:|---:|
@@ -126,7 +126,7 @@ Rigorous benchmarking against 17 established nuclear medicine targets revealed t
 
 ![Figure 7: Benchmark curves.](results/figures/figure_benchmark_roc.png)
 
-**Figure 7. Benchmark ROC and precision-recall curves.** (A) ROC curves comparing four model variants against 17 known nuclear medicine targets. (B) Precision-recall curves.
+**Figure 7. Benchmark ROC and precision-recall curves.** (A) ROC curves comparing three model variants against 17 known nuclear medicine targets. (B) Precision-recall curves.
 
 ### Ablation Analysis
 
@@ -152,9 +152,6 @@ Cancer-type-specific analysis across 32 cancer types revealed distinct target-in
 
 Structure quality assessment across 2,495 AlphaFold-predicted structures revealed robust structural coverage: 108 proteins (5.5%) had mean pLDDT exceeding 90 (very high confidence), 2,039 (82.5%) fell within the 70–90 range (generally reliable for pocket detection), and 332 (13.4%) were below 70, primarily corresponding to partially disordered regions. The pLDDT quality score was incorporated as a penalty term in the composite scoring, reducing the influence of targets with low-confidence structural models.
 
-![Figure 11: Covalent comparison.](results/figures/figure7_covalent_comparison.png)
-
-
 
 ### Normal Tissue Risk and Translational Assessment
 
@@ -171,7 +168,7 @@ Structure quality assessment across 2,495 AlphaFold-predicted structures reveale
 
 *EAS, Extracellular Accessibility Score; LTS, LDT Transferability Score; ADC, antibody-drug conjugate.*
 
-Normal tissue risk scoring across seven radiosensitive organs (kidney, liver, salivary gland, bone marrow, spleen, intestine, lung) using HPA IHC data identified 131 of 200 top targets (65.5%) as low-risk across all assessed organs. Nineteen targets (9.5%) showed high-level protein expression in one or more critical organs, warranting cautious evaluation for radiopharmaceutical applications. Binder tractability assessment revealed that six of the top 50 targets (12%) have high tractability—defined as existing clinical-stage ADC, monoclonal antibody, or radiotracer evidence—including TACSTD2 (7), EPCAM (5), MUC1 (5), CLDN4 (3), and LY75 (3). The remaining 44 targets (88%) have limited or no established binder evidence, representing opportunities for novel ligand discovery efforts.
+Normal tissue risk scoring across seven radiosensitive organs (kidney, liver, salivary gland, bone marrow, spleen, intestine, lung) using HPA IHC data identified 131 of 200 top targets (65.5%) as low-risk across all assessed organs. Nineteen targets (9.5%) showed high-level protein expression in one or more critical organs, warranting cautious evaluation for radiopharmaceutical applications. Binder tractability assessment revealed that five of the top 50 targets (10%) have high tractability, including TACSTD2 (7), EPCAM (5), MUC1 (5), CLDN4 (3), and LY75 (3). The remaining 44 targets (88%) have limited or no established binder evidence, representing opportunities for novel ligand discovery efforts.
 
 ## WEB INTERFACE
 
