@@ -6,6 +6,9 @@ data/structures/*.pdb
 data/structures/*.pka
 data/structures/*.cif
 
+# Publication-only EPS exports (58-228 MB each, exceed GitHub 100 MB limit)
+results/figures/eps/
+
 # Python cache
 __pycache__/
 *.pyc
@@ -17,3 +20,6 @@ C:/temp_sasa/
 # IDE
 .vscode/
 .idea/
+
+# Legacy root-level EPS exports (superseded by results/figures/eps/, stripped from history)
+results/figures/*.eps
