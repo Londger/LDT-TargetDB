@@ -1,0 +1,12 @@
+# LDT-TargetDB theme — matches manuscript figure house style
+# (dark-blue banner titles, Segoe UI, light neutral panels)
+[theme]
+base = "light"
+primaryColor = "#1F3A93"
+backgroundColor = "#FFFFFF"
+secondaryBackgroundColor = "#F4F7FB"
+textColor = "#1A1A2E"
+font = "sans serif"
+
+[client]
+toolbarMode = "minimal"

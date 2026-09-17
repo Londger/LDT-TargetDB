@@ -18,12 +18,85 @@ if (BASE / "streamlit_data").exists():
 else:
     DATA_DIR = BASE / "results"
 
-st.set_page_config(page_title="LDT-TargetDB", layout="wide")
-st.title("LDT-TargetDB")
-st.markdown("**Ligand-Directed Transfer Covalent Radiopharmaceutical Target Prioritization**")
-st.caption("Multi-omics + structural chemoproteomics for LDT-NAS radiopharmaceutical target discovery | "
-           "[Manuscript preprint](https://github.com/Londger/LDT-TargetDB) | "
-           "[FAQ / Help](#faq-help) — see the FAQ tab below")
+NAVY = "#1F3A93"          # house style: dark-blue banner titles (manuscript figures)
+
+st.set_page_config(page_title="LDT-TargetDB", layout="wide",
+                   initial_sidebar_state="expanded")
+
+
+def _int_or(v, default=0):
+    """NaN-safe int conversion for optional numeric columns."""
+    try:
+        return int(v) if pd.notna(v) else default
+    except (TypeError, ValueError):
+        return default
+
+
+def _fmt(v, fmt="{}", na="N/A"):
+    """NaN-safe number formatting."""
+    try:
+        return fmt.format(v) if v is not None and pd.notna(v) else na
+    except (TypeError, ValueError):
+        return na
+
+
+# ---- house-style CSS (navy banner, card metrics, Segoe UI) ----
+st.markdown(
+    """
+    <style>
+      .hero {
+        background: linear-gradient(120deg, #16265c 0%, #1F3A93 55%, #2e55c4 100%);
+        border-radius: 14px; padding: 26px 32px 22px 32px; margin-bottom: 10px;
+        color: #ffffff;
+      }
+      .hero-title { font-size: 2.05rem; font-weight: 700; letter-spacing: .5px;
+                    font-family: 'Segoe UI', 'Helvetica Neue', sans-serif; }
+      .hero-sub  { font-size: 1.02rem; opacity: .92; margin-top: 4px;
+                   font-family: 'Segoe UI', 'Helvetica Neue', sans-serif; }
+      .hero-meta { font-size: .82rem; opacity: .78; margin-top: 12px;
+                   border-top: 1px solid rgba(255,255,255,.25); padding-top: 9px;
+                   font-family: 'Segoe UI', 'Helvetica Neue', sans-serif; }
+      div[data-testid="stMetric"] {
+        background: linear-gradient(180deg, #f8fafd 0%, #eef2f9 100%);
+        border: 1px solid #dfe6f1; border-radius: 12px;
+        padding: 14px 16px 10px 16px;
+      }
+      div[data-testid="stMetricLabel"] p {
+        font-size: .82rem; color: #1F3A93; font-weight: 600;
+      }
+      div[data-testid="stMetricValue"] {
+        font-family: 'Segoe UI', 'Helvetica Neue', sans-serif;
+      }
+      .stTabs [data-baseweb="tab-highlight"] { background-color: #1F3A93; }
+      .stTabs [data-baseweb="tab"] {
+        font-family: 'Segoe UI', 'Helvetica Neue', sans-serif; font-weight: 600;
+      }
+      section[data-testid="stSidebar"] {
+        font-family: 'Segoe UI', 'Helvetica Neue', sans-serif;
+      }
+      section[data-testid="stSidebar"] h3 {
+        color: #1F3A93; font-size: 1.0rem; margin-bottom: 4px;
+      }
+      .stApp { font-family: 'Segoe UI', 'Helvetica Neue', sans-serif; }
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
+
+st.markdown(
+    """
+    <div class="hero">
+      <div class="hero-title">LDT-TargetDB</div>
+      <div class="hero-sub">Ligand-Directed Transfer Covalent Radiopharmaceutical Target Prioritization</div>
+      <div class="hero-meta">
+        Multi-omics + structural chemoproteomics &nbsp;·&nbsp; 2,473 surface proteins &nbsp;·&nbsp;
+        Deployed PU-v6 (44 features) &nbsp;·&nbsp; 54-target benchmark AUROC 0.830 [0.785–0.868]
+        &nbsp;·&nbsp; <a style="color:#cfe0ff" href="https://github.com/Londger/LDT-TargetDB">GitHub repository</a>
+      </div>
+    </div>
+    """,
+    unsafe_allow_html=True,
+)
 
 # ============================================================
 # Load Data
@@ -32,10 +105,12 @@ st.caption("Multi-omics + structural chemoproteomics for LDT-NAS radiopharmaceut
 def load_data():
     v6_file = DATA_DIR / "enhanced_ranking_v6.csv"
     if v6_file.exists():          # v6: 全量合并表 (PU v6部署分数/微环境/不确定度/HPA蛋白/糖基化/P2Rank/CT.gov)
-        return pd.read_csv(v6_file)
+        df = pd.read_csv(v6_file)
+        return _merge_covalent(df)
     v5_file = DATA_DIR / "enhanced_ranking_v5.csv"
     if v5_file.exists():          # v5回退
-        return pd.read_csv(v5_file)
+        df = pd.read_csv(v5_file)
+        return _merge_covalent(df)
     enhanced = pd.read_csv(DATA_DIR / "enhanced_final_ranking.csv")
     cancer = pd.read_csv(DATA_DIR / "cancer_type_specific_expression.csv")
     covalent = pd.read_csv(DATA_DIR / "covalent_strategy_comparison.csv")
@@ -53,6 +128,28 @@ def load_data():
                             "ntrs", "risk_level"] if c in v2.columns]
         enhanced = enhanced.merge(v2[cols], on="gene", how="left")
     return enhanced
+
+
+def _merge_covalent(df):
+    """v6/v5 路径: 合并共价策略对比列 (best_strategy 等), 使侧边栏筛选可用."""
+    cov_file = DATA_DIR / "covalent_strategy_comparison.csv"
+    if cov_file.exists() and "best_strategy" not in df.columns:
+        covalent = pd.read_csv(cov_file)
+        add_cols = [c for c in ["LDT_NAS_score", "SuFEx_CTR_score",
+                                 "Traditional_Acrylamide_score", "best_strategy"]
+                    if c in covalent.columns and c not in df.columns]
+        if add_cols:
+            df = df.merge(covalent[["gene"] + add_cols], on="gene", how="left")
+    return df
+
+
+@st.cache_data
+def load_cancer_types():
+    """cancer_type_specific_expression (Detail页用) — 缓存避免每次rerun读盘."""
+    p = DATA_DIR / "cancer_type_specific_expression.csv"
+    if p.exists():
+        return pd.read_csv(p)
+    return None
 
 
 @st.cache_data
@@ -109,16 +206,20 @@ NUC_COLORS = {"LYS": "#2196F3", "CYS": "#FF9800", "TYR": "#4CAF50", "SER": "#9C2
 # ============================================================
 # Sidebar
 # ============================================================
-st.sidebar.header("Filters")
+st.sidebar.markdown("### Filters")
 score_col = "enhanced_score_v2" if "enhanced_score_v2" in df.columns else "enhanced_score"
-min_score = st.sidebar.slider("Minimum Score", 0.0, 1.0, 0.0, 0.01)
+min_score = st.sidebar.slider("Minimum enhanced score", 0.0, 1.0, 0.0, 0.01,
+                              help="Filter on the enhanced prioritization score (EAS-integrated). "
+                                   "The deployed PU-v6 ranking is unaffected by this threshold.")
 selected_residue = st.sidebar.multiselect(
-    "Pocket Nucleophile", ["LYS", "CYS", "TYR", "SER"],
+    "Pocket nucleophile (best residue)", ["LYS", "CYS", "TYR", "SER"],
     default=["LYS", "CYS", "TYR", "SER"]
 )
-strategy_filter = st.sidebar.selectbox(
-    "Covalent Strategy", ["All", "LDT_NAS", "SuFEx_CTR", "Traditional_Acrylamide"]
-)
+if "best_strategy" in df.columns:
+    strategy_options = ["All"] + sorted(df["best_strategy"].dropna().unique().tolist())
+else:
+    strategy_options = ["All"]
+strategy_filter = st.sidebar.selectbox("Covalent strategy (per-target best)", strategy_options)
 
 # Apply filters
 out = df[df[score_col] >= min_score].copy()
@@ -127,14 +228,22 @@ if selected_residue:
 if strategy_filter != "All" and "best_strategy" in out.columns:
     out = out[out["best_strategy"] == strategy_filter]
 
+# Sort by the deployed rank (bug fix: CSV is stored in legacy composite-score
+# order; head(N) must follow the deployed PU-v6 ranking, not the storage order)
+if "pu_rank_v6" in out.columns:
+    out = out.sort_values("pu_rank_v6", na_position="last")
+elif "enhanced_rank" in out.columns:
+    out = out.sort_values("enhanced_rank", na_position="last")
+
 # ============================================================
 # Dashboard
 # ============================================================
 col1, col2, col3, col4 = st.columns(4)
-col1.metric("Total Targets", len(out))
-col2.metric("With Nucleophiles", out["n_nucleophiles"].gt(0).sum())
-col3.metric("LYS in Pocket", out["top_res_type"].eq("LYS").sum())
-col4.metric("Mean pLDDT", f"{out['mean_plddt'].mean():.0f}" if 'mean_plddt' in out.columns else "N/A")
+col1.metric("Targets shown", f"{len(out):,}")
+col2.metric("With nucleophiles", f"{out['n_nucleophiles'].gt(0).sum():,}")
+col3.metric("Lysine-pocket targets", f"{out['top_res_type'].eq('LYS').sum():,}")
+_mean_plddt = out["mean_plddt"].mean() if "mean_plddt" in out.columns else float("nan")
+col4.metric("Mean pLDDT", f"{_mean_plddt:.0f}" if pd.notna(_mean_plddt) else "N/A")
 
 tab1, tab_ind, tab2, tab3, tab4, tab5 = st.tabs(
     ["Ranking", "Indication view", "Visualization", "Detail", "FAQ / Help", "Download"])
@@ -161,9 +270,14 @@ with tab_ind:
         info_cols = [c for c in ["gene", "pu_rank_v6", "top_res_type", "tier", "label"]
                      if c in df.columns]
         show_i = sub.head(40).merge(df[info_cols], on="gene", how="left")
+        # known-target flag with per-row evidence tier (bug fix: previously the whole
+        # tier Series was f-string-rendered into every known row)
         if "label" in show_i.columns:
-            show_i["known"] = np.where(show_i.label == 1,
-                                       "yes" + (f" ({show_i.tier})" if "tier" in show_i else ""), "")
+            known = ["yes" if l == 1 else "" for l in show_i["label"]]
+            if "tier" in show_i.columns:
+                known = [k + (f" ({t})" if k and pd.notna(t) else "")
+                         for k, t in zip(known, show_i["tier"])]
+            show_i["known"] = known
         else:
             show_i["known"] = ""
         out_cols = [c for c in ["gene", "itsi", "fc", "p_tumor", "median_log2", "normal_med",
@@ -207,7 +321,9 @@ with tab1:
         column_config={
             "gene": "Gene",
             "pu_rank_v6": st.column_config.NumberColumn("Rank (deployed)", help="Proteome-wide rank of the deployed v6 score"),
-            "pu_score_v6": st.column_config.NumberColumn("PU Score (deployed v6)", format="%.3f", help="Deployed machine-learning prioritization score: PU-HGB ensemble (30 bootstrap bags) on 44 features (36 multi-omics/GEO/HPA/glycosylation + 6 microenvironment deconvolution features [tumor-purity expression attribution, high-purity ITSI, intratumor CV] + 2 P2Rank ligandability features). Out-of-fold on the 54-target benchmark: AUROC 0.830 [0.785-0.868], CV 0.829 ± 0.045, paired vs v5 +0.035 [−0.027,+0.091]; known targets scored out-of-fold"),
+            "pu_score_v6": st.column_config.ProgressColumn(
+                "PU Score (deployed v6)", min_value=0.0, max_value=1.0, format="%.3f",
+                help="Deployed machine-learning prioritization score: PU-HGB ensemble (30 bootstrap bags) on 44 features (36 multi-omics/GEO/HPA/glycosylation + 6 microenvironment deconvolution features [tumor-purity expression attribution, high-purity ITSI, intratumor CV] + 2 P2Rank ligandability features). Out-of-fold on the 54-target benchmark: AUROC 0.830 [0.785-0.868], CV 0.829 ± 0.045, paired vs v5 +0.035 [−0.027,+0.091]; known targets scored out-of-fold"),
             "pu_score_v5": st.column_config.NumberColumn("PU v5 Score", format="%.3f", help="Previous generation: 36 features (27 multi-omics + GEO + HPA protein + glycosylation); 54-target retrain AUROC 0.794 [0.747-0.837]"),
             "bag_sd_v6": st.column_config.NumberColumn("Uncertainty (SD)", format="%.3f", help="Bagged uncertainty: standard deviation of predictions across the 30 bootstrap PU bags of the deployed model. Low SD = stable consensus; high SD = prediction is model-dependent"),
             "pu_score_v5w": st.column_config.NumberColumn("PU v5w Score", format="%.3f", help="Tier-weighted sensitivity variant (v5): positives weighted by clinical evidence tier (approved=3, phase II/III=2, phase I/historical=1); 54-target retrain AUROC 0.792"),
@@ -221,7 +337,7 @@ with tab1:
             "n_nucleophiles": "# Nuc",
             "best_cancer": "Top Cancer",
             "hpa_tumor_level_max": st.column_config.NumberColumn("HPA protein (max IHC)", format="%.0f", help="Human Protein Atlas tumor IHC: maximum staining level across cancer types (0=not detected, 3=high) - protein-level validation of the RNA signal"),
-            "tier": st.column_config.NumberColumn("Evidence tier", help="Clinical evidence tier of known radioligand targets: tier3=approved drug, tier2=phase II/III trials, tier1=phase I/historical"),
+            "tier": st.column_config.TextColumn("Evidence tier", help="Clinical evidence tier of known radioligand targets: tier3=approved drug, tier2=phase II/III trials, tier1=phase I/historical"),
             "depmap_label": "DepMap",
             "mean_plddt": st.column_config.NumberColumn("pLDDT", format="%.0f"),
         }, hide_index=True)
@@ -238,24 +354,48 @@ with tab1:
 # ============================================================
 with tab2:
     st.subheader("TSI vs LDT")
+    st.caption("Tumor specificity versus LDT transferability across the filtered target set. "
+               "Upper-right = simultaneously tumor-specific and chemistry-compatible candidates.")
     color_map = NUC_COLORS
+
+    def _style_fig(fig, title):
+        fig.update_layout(
+            template="plotly_white",
+            title=dict(text=title, font=dict(color=NAVY, size=17)),
+            font=dict(family="Segoe UI, Helvetica Neue, sans-serif", size=13, color="#1a1a2e"),
+            legend=dict(title="Nucleophile"),
+            margin=dict(l=60, r=30, t=60, b=50),
+        )
+        return fig
+
     fig = px.scatter(out, x="tsi_norm", y="ldt_norm", color="top_res_type",
-                     hover_name="gene", title="Tumor Specificity vs LDT Transferability",
-                     color_discrete_map=color_map)
-    st.plotly_chart(fig, use_container_width=True)
+                     hover_name="gene",
+                     labels={"tsi_norm": "TSI (normalized)",
+                             "ldt_norm": "LDT transferability (normalized)",
+                             "top_res_type": "Nucleophile"},
+                     color_discrete_map=color_map,
+                     opacity=0.75)
+    fig.update_traces(marker=dict(size=8, line=dict(width=0.5, color="white")))
+    st.plotly_chart(_style_fig(fig, "Tumor Specificity vs LDT Transferability"),
+                    use_container_width=True)
 
     ca, cb = st.columns(2)
     with ca:
         rc = out["top_res_type"].value_counts()
-        fig2 = px.pie(values=rc.values, names=rc.index,
-                      title="Nucleophile Distribution", color_discrete_map=color_map)
-        st.plotly_chart(fig2, use_container_width=True)
+        fig2 = px.pie(values=rc.values, names=rc.index, hole=0.45,
+                      title="Nucleophile distribution",
+                      color_discrete_map=color_map)
+        fig2.update_traces(textinfo="percent", textfont_size=12)
+        st.plotly_chart(_style_fig(fig2, "Nucleophile distribution"), use_container_width=True)
     with cb:
         if "mean_plddt" in out.columns:
             fig3 = px.histogram(out, x="mean_plddt", nbins=30,
-                                 title="pLDDT Distribution",
-                                 labels={"mean_plddt": "Mean pLDDT"})
-            st.plotly_chart(fig3, use_container_width=True)
+                                title="pLDDT distribution",
+                                labels={"mean_plddt": "Mean pLDDT", "count": "Targets"},
+                                color_discrete_sequence=[NAVY])
+            fig3.add_vline(x=70, line_dash="dash", line_color="#B03A2E",
+                           annotation_text="pLDDT 70", annotation_position="top left")
+            st.plotly_chart(_style_fig(fig3, "pLDDT distribution"), use_container_width=True)
 
 # ============================================================
 # Tab 3: Gene Detail (含3D口袋可视化 + 残基表)
@@ -284,14 +424,16 @@ with tab3:
         if "mean_plddt" in r.index and pd.notna(r.get("mean_plddt")):
             c8.metric("Mean pLDDT", f"{r['mean_plddt']:.0f}")
 
-        st.markdown(f"**Nucleophile:** {r.get('top_res_type', '?')} | "
-                    f"**Top Cancer:** {r.get('best_cancer', '?')} ({r.get('best_log2tpm', '?')} log2TPM) | "
-                    f"**DepMap:** {r.get('depmap_label', '?')} (Chronos {r.get('depmap_score', float('nan')):.3g})"
-                    + (f" | **NTRS:** {r['ntrs']:.2f}" if "ntrs" in r.index and pd.notna(r.get("ntrs")) else "")
-                    + (" | :star: Known radioligand target" if r.get("known_target") == 1 else ""))
+        st.markdown(
+            f"**Nucleophile:** {r.get('top_res_type', '?')} | "
+            f"**Top Cancer:** {r.get('best_cancer', '?')} ({_fmt(r.get('best_log2tpm'), '{:.1f}')} log2TPM) | "
+            f"**DepMap:** {r.get('depmap_label', '?')} (Chronos {_fmt(r.get('depmap_score'), '{:.3g}')})"
+            + (f" | **NTRS:** {r['ntrs']:.2f}" if "ntrs" in r.index and pd.notna(r.get("ntrs")) else "")
+            + (" | :star: Known radioligand target" if r.get("known_target") == 1 else ""))
 
         # ---- v5/v6: 不确定度 + 蛋白层/糖基化/微环境证据 + 临床转化 + 失败模式 (D11) ----
-        ev1, ev2, ev3, ev4, ev5, ev6, ev7 = st.columns(7)
+        ev1, ev2, ev3, ev4 = st.columns(4)
+        ev5, ev6, ev7, _ = st.columns(4)
         if "bag_sd_v6" in r.index and pd.notna(r.get("bag_sd_v6")):
             ev1.metric("Prediction uncertainty (bag SD)",
                        f"{r['bag_sd_v6']:.3f}",
@@ -306,14 +448,14 @@ with tab3:
             lvl_names = {0.0: "Not detected", 1.0: "Low", 2.0: "Medium", 3.0: "High"}
             ev2.metric("HPA tumor protein (max IHC)",
                        lvl_names.get(float(r["hpa_tumor_level_max"]), r["hpa_tumor_level_max"]),
-                       help=f"Protein-level validation: maximum tumor IHC staining across {int(r.get('n_cancers_med_high', 0))} cancer types with medium/high staining. Source: Human Protein Atlas v22 pathology.")
+                       help=f"Protein-level validation: maximum tumor IHC staining across {_int_or(r.get('n_cancers_med_high'))} cancer types with medium/high staining. Source: Human Protein Atlas v22 pathology.")
         if "n_glyco_EC" in r.index and pd.notna(r.get("n_glyco_EC")):
             ev3.metric("EC N-glycosylation sites",
-                       int(r["n_glyco_EC"]),
+                       _int_or(r["n_glyco_EC"]),
                        help="UniProt-annotated extracellular N-linked glycosylation sites. Densely glycosylated pockets may shield residues from both antibody fragments and small-molecule ligands (glycan-near-pocket ratio in the download file).")
         if "ctgov_n_trials" in r.index and pd.notna(r.get("ctgov_n_trials")):
             ev4.metric("CT.gov radioligand trials",
-                       int(r["ctgov_n_trials"]),
+                       _int_or(r["ctgov_n_trials"]),
                        help=f"Highest interventional phase: {r.get('ctgov_max_phase', 'N/A')}. Source: ClinicalTrials.gov API v2 (see Supplementary Table S6).")
         if "p2rank_top_prob" in r.index and pd.notna(r.get("p2rank_top_prob")):
             ev5.metric("P2Rank ligandability",
@@ -322,7 +464,7 @@ with tab3:
         if "p2rank_filt_top_prob" in r.index and pd.notna(r.get("p2rank_filt_top_prob")):
             ev6.metric("P2Rank (EC-filtered)",
                        f"{r['p2rank_filt_top_prob']:.3f}",
-                       help=f"P2Rank on the refined structure (pLDDT<50, signal peptide and non-extracellular residues removed; {int(r.get('p2rank_filt_n_pockets', 0))} pockets with probability>=0.5). Consistent with the refined pocket analysis used for ranking.")
+                       help=f"P2Rank on the refined structure (pLDDT<50, signal peptide and non-extracellular residues removed; {_int_or(r.get('p2rank_filt_n_pockets'))} pockets with probability>=0.5). Consistent with the refined pocket analysis used for ranking.")
         if "purity_corr_max" in r.index and pd.notna(r.get("purity_corr_max")):
             ev7.metric("Tumor-purity corr (max)",
                        f"{r['purity_corr_max']:.2f}",
@@ -363,7 +505,7 @@ with tab3:
                     try:
                         import py3Dmol
                         pocket_nums = set(p["res_num"] for p in pocket_res)
-                        view = py3Dmol.view(width=700, height=480)
+                        view = py3Dmol.view(width=880, height=520)
                         view.addModel(r_pdb, "pdb")
                         view.setStyle({"cartoon": {"color": "lightblue", "opacity": 0.5}})
                         view.addStyle({"resi": list(pocket_nums)},
@@ -373,7 +515,11 @@ with tab3:
                                 view.addStyle({"resi": p["res_num"]},
                                               {"stick": {"color": NUC_COLORS[p["res_type"]], "radius": 0.3}})
                         view.zoomTo()
-                        components.html(view._make_html(), height=500, scrolling=False)
+                        html = view._make_html().replace(
+                            "</head>",
+                            "<style>body{display:flex;justify-content:center;"
+                            "align-items:center;margin:0;height:100vh}</style></head>")
+                        components.html(html, height=540, scrolling=False)
                     except ImportError:
                         st.warning("py3Dmol not available; showing pocket residues in the table below.")
 
@@ -418,12 +564,20 @@ with tab3:
                         f"[UniProt](https://www.uniprot.org/uniprotkb/{uniprot})")
 
         # Cancer-type specific expression
-        ct_data = pd.read_csv(DATA_DIR / "cancer_type_specific_expression.csv")
-        ct_hit = ct_data[ct_data["gene"].str.upper() == search]
-        if len(ct_hit) > 0:
-            st.markdown(f"**Best Cancer Types:** {ct_hit['best_cancer'].values[0]} ({ct_hit['best_log2tpm'].values[0]}), "
-                        f"{ct_hit['second_cancer'].values[0]} ({ct_hit['second_log2tpm'].values[0]}), "
-                        f"{ct_hit['third_cancer'].values[0]} ({ct_hit['third_log2tpm'].values[0]})")
+        ct_data = load_cancer_types()
+        if ct_data is not None:
+            ct_hit = ct_data[ct_data["gene"].str.upper() == search]
+            if len(ct_hit) > 0:
+                ctr = ct_hit.iloc[0]
+
+                def _ct(name, log2):
+                    return f"{name} ({_fmt(log2, '{:.1f}')} log2TPM)" if pd.notna(name) and pd.notna(log2) else None
+
+                parts = [p for p in [_ct(ctr["best_cancer"], ctr["best_log2tpm"]),
+                                     _ct(ctr["second_cancer"], ctr["second_log2tpm"]),
+                                     _ct(ctr["third_cancer"], ctr["third_log2tpm"])] if p]
+                if parts:
+                    st.markdown("**Best cancer types:** " + ", ".join(parts))
     else:
         st.warning(f"'{search}' not found.")
 
@@ -545,8 +699,16 @@ with tab5:
                            itsi_wide.to_csv(), "LDT_TargetDB_ITSI_matrix.csv", "text/csv")
 
 st.sidebar.markdown("---")
-st.sidebar.markdown("**LDT-TargetDB v2.4** (Major Revision)")
-st.sidebar.markdown("New: PU-v6 deployed score (44 features incl. microenvironment deconvolution "
-                    "and P2Rank ligandability, 54-benchmark AUROC 0.830), bagged uncertainty, "
-                    "indication-specific view, failure-mode annotations, CT.gov trial counts")
+st.sidebar.markdown("**About LDT-TargetDB v2.4**")
+st.sidebar.markdown(
+    "PU-v6 deployed score (44 features incl. microenvironment deconvolution "
+    "and P2Rank ligandability, 54-target benchmark AUROC 0.830), bagged uncertainty, "
+    "indication-specific view, failure-mode annotations, CT.gov trial counts")
 st.sidebar.markdown("[GitHub](https://github.com/Londger/LDT-TargetDB)")
+
+st.markdown("---")
+st.caption(
+    "LDT-TargetDB v2.4 · Institute of Radiation Medicine, CAMS & PUMC · "
+    "Data: TCGA / GTEx (UCSC Xena), Human Protein Atlas v22, UniProt, AlphaFold DB, "
+    "DepMap, ClinicalTrials.gov · If you use this resource, please cite the "
+    "LDT-TargetDB manuscript (Bioinformatics Advances, BIOADV-2026-446).")
