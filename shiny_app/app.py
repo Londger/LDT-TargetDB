@@ -556,6 +556,12 @@ with tab3:
             elif len(prow) > 0:
                 st.info("No detectable extracellular pocket for this target after filtering "
                         "(pLDDT ≥ 50, extracellular residues only).")
+            else:
+                st.info(
+                    "Structural pocket analysis (3D view) is not available for this target: the refined "
+                    "pocket/nucleophile analysis covers the top 200 targets of the Stage-1 enhanced-composite "
+                    "ranking (two-stage workflow, manuscript Methods), and this gene is outside that set. "
+                    "Use the AlphaFold link below to inspect the full predicted structure.")
 
         # AlphaFold直链 (按accession, 不按名称搜索)
         uniprot = r.get('uniprot_id', '')
