@@ -1,0 +1,22 @@
+name: Keep app awake
+
+# Streamlit Community Cloud 会将长期无访问的应用转入休眠，
+# 每 10 分钟 ping 一次主页以重置休眠计时器，保证审稿人随时打开即可用。
+on:
+  schedule:
+    - cron: "*/10 * * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping LDT-TargetDB
+        run: |
+          code=$(curl -s -o /dev/null -w "%{http_code}" -m 60 https://ldt-targetdb.streamlit.app/)
+          echo "GET / -> HTTP $code"
+          health=$(curl -s -m 60 https://ldt-targetdb.streamlit.app/_stcore/health)
+          echo "health endpoint: $health"
