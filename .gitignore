@@ -23,3 +23,6 @@ C:/temp_sasa/
 
 # Legacy root-level EPS exports (superseded by results/figures/eps/, stripped from history)
 results/figures/*.eps
+
+# Agent state files
+.claude/
